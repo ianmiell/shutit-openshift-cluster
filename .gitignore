@@ -1,0 +1,9 @@
+*pyc
+**/*.pyc
+vagrant_run/*
+secret
+vault
+credscontroller
+package.box
+tmpvagrantboxcreate
+last_args*

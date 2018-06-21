@@ -1,0 +1,59 @@
+Vagrant.configure("2") do |config|
+  config.landrush.enabled = true
+  config.vm.define "chefserver" do |chefserver|
+    chefserver.vm.box = "{{ vagrant_image }}"
+    chefserver.vm.hostname = "chefserver.vagrant.test"
+    chefserver.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--memory", "2048"]
+    end
+  end
+  config.vm.define "chefwkstn" do |chefwkstn|
+    chefwkstn.vm.box = "{{ vagrant_image }}"
+    chefwkstn.vm.hostname = "chefwkstn.vagrant.test"
+    chefwkstn.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--memory", "1024"]
+    end
+  end
+  config.vm.define "master1" do |master1|
+	master1.vm.box = "{{ vagrant_image }}"
+	master1.vm.hostname = "master1.vagrant.test"
+	master1.vm.provider :virtualbox do |v|
+	  v.customize ["modifyvm", :id, "--memory", "2048"]
+	end
+  end
+  config.vm.define "etcd1" do |etcd1|
+	etcd1.vm.box = "{{ vagrant_image }}"
+	etcd1.vm.hostname = "etcd1.vagrant.test"
+	etcd1.vm.provider :virtualbox do |v|
+	  v.customize ["modifyvm", :id, "--memory", "1024"]
+	end
+  end
+  config.vm.define "etcd2" do |etcd2|
+	etcd2.vm.box = "{{ vagrant_image }}"
+	etcd2.vm.hostname = "etcd2.vagrant.test"
+	etcd2.vm.provider :virtualbox do |v|
+	  v.customize ["modifyvm", :id, "--memory", "1024"]
+	end
+  end
+  config.vm.define "etcd3" do |etcd3|
+	etcd3.vm.box = "{{ vagrant_image }}"
+	etcd3.vm.hostname = "etcd3.vagrant.test"
+	etcd3.vm.provider :virtualbox do |v|
+	  v.customize ["modifyvm", :id, "--memory", "1024"]
+	end
+  end
+  config.vm.define "node1" do |node1|
+	node1.vm.box = "{{ vagrant_image }}"
+	node1.vm.hostname = "node1.vagrant.test"
+	node1.vm.provider :virtualbox do |v|
+	  v.customize ["modifyvm", :id, "--memory", "2048"]
+	end
+  end
+  config.vm.define "node2" do |node2|
+	node2.vm.box = "{{ vagrant_image }}"
+	node2.vm.hostname = "node2.vagrant.test"
+	node2.vm.provider :virtualbox do |v|
+	  v.customize ["modifyvm", :id, "--memory", "2048"]
+	end
+  end
+end

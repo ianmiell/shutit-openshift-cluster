@@ -1,0 +1,75 @@
+{
+  "chef_type": "environment",
+  "cookbook_versions": {},
+  "default_attributes": {},
+  "description": "",
+  "json_class": "Chef::Environment",
+  "name": "ocp-cluster-environment",
+  "override_attributes": {
+    "cookbook-openshift3": {
+{% if cfg['chef_deploy_containerized'] %}
+      "deploy_containerized": true,
+      "openshift_docker_image_version": "{{ cfg['openshift_docker_image_version'] }}",
+{% else %}
+      "deploy_containerized": false,
+{% endif %}
+      "deploy_dnsmasq": false,
+      "osn_cluster_dns_ip": "172.30.0.1",
+      "etcd_servers": [
+        {
+          "fqdn": "{{ test_config_module.machines['etcd1']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['etcd1']['ip'] }}"
+        },
+        {
+          "fqdn": "{{ test_config_module.machines['etcd2']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['etcd2']['ip'] }}"
+        },
+        {
+          "fqdn": "{{ test_config_module.machines['etcd3']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['etcd3']['ip'] }}"
+        }
+      ],
+      "master_servers": [
+        {
+          "fqdn": "{{ test_config_module.machines['master1']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['master1']['ip'] }}"
+        }
+      ],
+      "node_servers": [
+        {
+          "fqdn": "{{ test_config_module.machines['node1']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['node1']['ip'] }}",
+          "labels": "region=user",
+          "schedulable": true
+        },
+        {
+          "fqdn": "{{ test_config_module.machines['node2']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['node2']['ip'] }}",
+          "labels": "region=infra",
+          "schedulable": true
+        }
+      ],
+      "openshift_HA": true,
+      "openshift_builddefaults_env": [
+        {
+          "NO_PROXY": "master1.vagrant.test"
+        }
+      ],
+      "openshift_cluster_name": "{{ test_config_module.machines['master1']['fqdn'] }}",
+      "openshift_common_sdn_network_plugin_name": "redhat/openshift-ovs-multitenant",
+      "openshift_deployment_type": "origin",
+      "openshift_hosted_managed_router": false,
+      "openshift_hosted_managed_registry": false,
+      "openshift_node_docker-storage": {
+        "VG": "docker-vg"
+      },
+      "ose_major_version": "{{ cfg['ose_major_version'] }}"
+{% if cfg['ose_version'] != '3.6' %}
+      , "ose_version": "{{ cfg['ose_version'] }}"
+{% endif %}
+{% if cfg['ose_version'] > '3' %}
+      , "osn_cluster_dns_ip": "10.0.2.15"
+{% endif %}
+    }
+  }
+}

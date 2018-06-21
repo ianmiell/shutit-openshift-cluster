@@ -1,0 +1,10 @@
+{
+  "chef_type": "role",
+  "default_attributes": {},
+  "description": "Etcd marker role for duty discovery",
+  "env_run_lists": {},
+  "json_class": "Chef::Role",
+  "name": "testcluster1_openshift_etcd_duty",
+  "override_attributes": {},
+  "run_list": []
+}

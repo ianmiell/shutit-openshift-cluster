@@ -1,0 +1,10 @@
+{
+  "chef_type": "role",
+  "default_attributes": {},
+  "description": "Role-based duty discovery marker role",
+  "env_run_lists": {},
+  "json_class": "Chef::Role",
+  "name": "testcluster1_use_role_based_duty_discovery",
+  "override_attributes": {},
+  "run_list": []
+}

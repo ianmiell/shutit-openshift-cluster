@@ -1,0 +1,41 @@
+  503  apt-get update
+  506  apt-get install git golang golang-golang-x-net-dev build-essential golang-golang-x-tools
+  507  git clone https://github.com/hashicorp/otto.git
+  508  cd otto/
+  517  export GOPATH=/usr/share/go
+  524  export PATH=$PATH:/usr/lib/go/bin
+  518  go get -u github.com/jteeuwen/go-bindata/...
+  583  go get github.com/mitchellh/gox
+  520  cd /
+  521  find . | grep go-bindata
+  522  find . | grep go-bindata$
+  523  cd -
+  533  cd /otto/
+  535  go get
+  545  env
+  548  export GOPATH=/opt/
+  552  cd /
+  554  mv otto /usr/share/gocode/src/
+  555  cd /usr/share/gocode/src/
+  557  cd otto/
+  561  cd ..
+  562  mv otto ../../go
+  563  cd ../../go
+  565  cd otto/
+  568  cd ..
+  569  mv otto src/
+  570  cd src/
+  572  cd otto/
+  574  make
+  575  make bin
+  584  make
+  585  go bin
+  586  make bin
+  587  mkdir -p /usr/share/go/bin
+  588  make bin
+  589  apt-get install zip
+  590  make bin
+  591  otto
+  592  history | less
+  593  history
+
