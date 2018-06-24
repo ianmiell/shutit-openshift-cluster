@@ -96,7 +96,7 @@ then
 fi
 if [[ $LOG_LEVEL = '' ]]
 then
-	LOG_LEVEL='debug'
+	LOG_LEVEL='info'
 fi
 if [[ $SHUTIT_CLUSTER_CONFIGS = '' ]]
 then
