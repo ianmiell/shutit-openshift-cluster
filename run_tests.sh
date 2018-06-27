@@ -203,7 +203,6 @@ do
 					-l ${LOG_LEVEL} \
 					-d bash \
 					--echo \
-					--pane \
 					--interactive ${SHUTIT_INTERACTIVE} \
 					-m shutit-library/vagrant:shutit-library/virtualbox \
 					-s ${SHUTIT_MODULE_NAME} test_config_dir                       ${test_dir} \
