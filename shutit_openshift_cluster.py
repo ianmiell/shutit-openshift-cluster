@@ -415,6 +415,8 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 					break
 				count -= 1
 				if status == 'Running':
+					shutit_master1_session.send('#' + status)
+					status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^router- | grep -v deploy | awk '{print $3}' | grep -v Terminating""")
 					ok = True
 					break
 				elif status in ('Error','ImagePullBackOff'):
