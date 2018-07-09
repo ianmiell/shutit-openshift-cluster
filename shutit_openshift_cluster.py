@@ -403,6 +403,9 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 				shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig label node ' + test_config_module.machines[machine]['fqdn'] + ' region=' + test_config_module.machines[machine]['region'] + ' --overwrite')
 		###############################################################################
 
+		# This pause appears to be needed to ensure things settle down. Otherwise it seems that router and registry may die without leaving any obvious trace.
+		shutit_master1_session.send('sleep 600')
+
 		################################################################################
 		# SET UP CORE APPS
 		while True:

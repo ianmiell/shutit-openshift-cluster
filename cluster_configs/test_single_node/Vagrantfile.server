@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
 	node1.vm.box = "{{ vagrant_image }}"
 	node1.vm.hostname = "node1.vagrant.test"
 	node1.vm.provider :virtualbox do |v|
-	  v.customize ["modifyvm", :id, "--memory", "2048"]
+	  v.customize ["modifyvm", :id, "--memory", "4096"]
 	end
   end
 end
