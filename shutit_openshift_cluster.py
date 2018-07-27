@@ -565,7 +565,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		# Check all is OK/Sane
 		shutit.get_config(self.module_id,'chef_deploy_method',default='solo')
 		assert shutit.cfg[self.module_id]['chef_deploy_method'] in ('solo','server')
-		for upgrade_item in ('do_upgrade_13_14','do_upgrade_14_15','do_upgrade_15_36','do_upgrade_36_37','do_upgrade_37_39'):
+		for upgrade_item in ('do_upgrade_14_15','do_upgrade_15_36','do_upgrade_36_37','do_upgrade_37_39'):
 			shutit.get_config(self.module_id,upgrade_item)
 			if shutit.cfg[self.module_id][upgrade_item] == 'true':
 				shutit.cfg[self.module_id][upgrade_item] = True

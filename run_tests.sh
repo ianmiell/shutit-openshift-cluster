@@ -32,7 +32,6 @@ SHUTIT_MODULE_NAME='tk.shutit.shutit_openshift_cluster.shutit_openshift_cluster'
 # SHUTIT_CLUSTER_CONFIGS - default 'test_multi_node_separate_etcd'
 # SHUTIT_INTERACTIVE
 #  - Whether to run interactively 0 (non), or 1 (give pause point)
-# UPGRADE_13_14 - if non-empty and not false, upgrade from 1.3 to 1.4
 # UPGRADE_14_15 - if non-empty and not false, upgrade from 1.4 to 1.5
 # UPGRADE_15_36 - if non-empty and not false, upgrade from 1.5 to 3.6
 # UPGRADE_36_37 - if non-empty and not false, upgrade from 3.6 to 3.7
@@ -45,7 +44,7 @@ fi
 
 if [[ $OSE_VERSIONS = '' ]]
 then
-	OSE_VERSIONS='1.3 3.6 3.7 3.9'
+	OSE_VERSIONS='1.4 3.6 3.7 3.9'
 fi
 
 if [[ $CHEF_YUM_COOKBOOK_VERSION = '' ]]
@@ -194,10 +193,6 @@ do
 				then
 					ose_version="1.4.1-1.el7"
 					ose_docker_image_version="v1.4.1"
-				elif [[ $ose_major_version == '1.3' ]]
-				then
-					ose_version="1.3.3-1.el7"
-					ose_docker_image_version="v1.3.3"
 				fi
 				$SHUTIT build \
 					-l ${LOG_LEVEL} \
@@ -216,7 +211,6 @@ do
 					-s ${SHUTIT_MODULE_NAME} inject_compat_resource                ${CHEF_INJECT_COMPAT_RESOURCE_COOKBOOK_VERSION} \
 					-s ${SHUTIT_MODULE_NAME} chef_deploy_method                    ${deploy_method} \
 					-s ${SHUTIT_MODULE_NAME} chef_deploy_containerized             ${deploy_containerized} \
-					-s ${SHUTIT_MODULE_NAME} do_upgrade_13_14                      ${UPGRADE_13_14} \
 					-s ${SHUTIT_MODULE_NAME} do_upgrade_14_15                      ${UPGRADE_14_15} \
 					-s ${SHUTIT_MODULE_NAME} do_upgrade_15_36                      ${UPGRADE_15_36} \
 					-s ${SHUTIT_MODULE_NAME} do_upgrade_36_37                      ${UPGRADE_36_37} \
