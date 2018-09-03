@@ -7,7 +7,7 @@ machines.update({'master1':{
 	'is_first_master':True,
 	'is_lb':False,
 	'is_master':True,
-	'is_node':False,
+	'is_node':True,
 	'region':'NA'
 }})
 machines.update({'etcd1':{

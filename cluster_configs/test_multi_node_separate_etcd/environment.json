@@ -36,6 +36,11 @@
       ],
       "node_servers": [
         {
+          "fqdn": "{{ test_config_module.machines['master1']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['master1']['ip'] }}",
+          "schedulable": true
+        },
+        {
           "fqdn": "{{ test_config_module.machines['node1']['fqdn'] }}",
           "ipaddress": "{{ test_config_module.machines['node1']['ip'] }}",
           "labels": "region=user",
