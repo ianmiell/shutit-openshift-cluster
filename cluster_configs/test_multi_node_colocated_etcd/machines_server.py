@@ -40,7 +40,7 @@ machines.update({'master2':{
 	'is_first_master':False,
 	'is_lb':False,
 	'is_master':False,
-	'is_node':True,
+	'is_node':False,
 	'region':'NA'
 }})
 machines.update({'master3':{
@@ -51,7 +51,7 @@ machines.update({'master3':{
 	'is_first_master':False,
 	'is_lb':False,
 	'is_master':False,
-	'is_node':True,
+	'is_node':False,
 	'region':'NA'
 }})
 machines.update({'node1':{
