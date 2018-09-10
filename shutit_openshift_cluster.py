@@ -122,7 +122,7 @@ class shutit_openshift_cluster(ShutItModule):
 		################################################################################
 		# Set up the sessions
 		for machine in test_config_module.machines.keys():
-			shutit_sessions.update({machine:shutit.create_session('bash')})
+			shutit_sessions.update({machine:shutit.create_session(session_type='bash', loglevel='debug')})
 		################################################################################
 
 		################################################################################
