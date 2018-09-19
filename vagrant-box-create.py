@@ -12,7 +12,6 @@ s.send('vagrant up')
 # Log onto machine and prepare it.
 s.login('vagrant ssh')
 s.login('sudo su -')
-s.pause_point('')
 s.send('yum install -y wget')
 # Not necessary, but handy
 s.install('yum-utils')
@@ -40,9 +39,13 @@ s.send('wget -qO- https://raw.githubusercontent.com/ianmiell/vagrant-swapfile/ma
 s.send('echo root:origin | /usr/sbin/chpasswd')
 
 # Downloads
+# Client
 s.send('wget -nc -q https://packages.chef.io/files/stable/chef/13.5.3/el/7/chef-13.5.3-1.el7.x86_64.rpm')
 #s.send('wget -nc -q https://packages.chef.io/files/stable/chef/12.21.4/el/7/chef-12.21.4-1.el7.x86_64.rpm')
-s.send('wget -nc -q https://packages.chef.io/files/stable/chefdk/1.6.1/el/7/chefdk-1.6.1-1.el7.x86_64.rpm')
+# Chefdk
+s.send('wget -nc -q https://packages.chef.io/files/stable/chefdk/2.5.3/el/7/chefdk-2.5.3-1.el7.x86_64.rpm')
+# Chef server
+# eg https://downloads.chef.io/chef-server/12.17.33
 # Go to chef website and download the rpm. Then split and store on github, and pull from the raw links here.
 #eg:
 # split -b 49m chef-server-core-12.17.3-1.el7.x86_64.rpm chef-server-core-12.17.3-1.el7.x86_64.rpm.x
@@ -53,7 +56,7 @@ s.send('cat chef-server-core-12.17.3-1.el7.x86_64.rpm.xaa chef-server-core-12.17
 s.send('rm -f *xaa *xab *xac')
 
 # Guest additions
-s.multisend('yum install -y dkms kernel-devel kernel-devel-3.10.0-693.17.1.el7.x86_64',{'s this ok':'y'})
+s.multisend('yum install -y dkms kernel-devel kernel-devel-3.10.0-862.2.3.el7.x86_64',{'s this ok':'y'})
 s.multisend('yum groupinstall "Development Tools"',{'s this ok':'y'})
 s.send('wget -q http://download.virtualbox.org/virtualbox/5.2.2/VBoxGuestAdditions_5.2.2.iso')
 s.send('mount -t iso9660 -o loop ./VBoxGuestAdditions_*.iso /mnt')
