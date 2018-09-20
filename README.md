@@ -10,7 +10,7 @@ To run (virtualbox flavour):
 [sudo] pip install shutit
 git clone --recursive https://github.com/ianmiell/shutit-openshift-cluster
 cd shutit-openshift-cluster
-./run.sh
+./run_tests.sh
 ```
 
 To run (libvirt flavour, eg Centos7):
@@ -22,7 +22,7 @@ yum install -y python-pip git
 pip install shutit
 git clone --recursive https://github.com/ianmiell/shutit-openshift-cluster
 cd shutit-openshift-cluster
-./run.sh --echo -s shutit-library.virtualization.virtualization.virtualization virt_method libvirt
+./run_tests.sh --echo -s shutit-library.virtualization.virtualization.virtualization virt_method libvirt
 ```
 
 
