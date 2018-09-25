@@ -29,7 +29,7 @@ SHUTIT_MODULE_NAME='tk.shutit.shutit_openshift_cluster.shutit_openshift_cluster'
 # CHEF_INJECT_COMPAT_RESOURCE_COOKBOOK_VERSION
 #  - compat resource cookbook version
 # LOG_LEVEL - ShutIt log level, default 'debug'
-# SHUTIT_CLUSTER_CONFIGS - default 'test_multi_node_separate_etcd'
+# SHUTIT_CLUSTER_CONFIGS - default 'test_multi_node_basic_cert_server'
 # SHUTIT_INTERACTIVE
 #  - Whether to run interactively 0 (non), or 1 (give pause point)
 # UPGRADE_14_15 - if non-empty and not false, upgrade from 1.4 to 1.5
@@ -99,7 +99,7 @@ then
 fi
 if [[ $SHUTIT_CLUSTER_CONFIGS = '' ]]
 then
-	SHUTIT_CLUSTER_CONFIGS='test_multi_node_colocated_etcd'
+	SHUTIT_CLUSTER_CONFIGS='test_multi_node_basic_cert_server'
 fi
 
 if [[ $SHUTIT_INTERACTIVE = '' ]] || ! echo $- | grep i

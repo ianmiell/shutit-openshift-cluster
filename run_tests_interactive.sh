@@ -169,7 +169,7 @@ else
 fi
 if [[ $SHUTIT_CLUSTER_CONFIGS = '' ]]
 then
-	export SHUTIT_CLUSTER_CONFIGS='test_multi_node_colocated_etcd'
+	export SHUTIT_CLUSTER_CONFIGS='test_multi_node_basic_cert_server'
 else
 	export SHUTIT_CLUSTER_CONFIGS="${SHUTIT_CLUSTER_CONFIGS}"
 fi
