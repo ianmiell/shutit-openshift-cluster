@@ -9,7 +9,7 @@
     "cookbook-openshift3": {
 {% if cfg['chef_deploy_containerized'] %}
       "deploy_containerized": true,
-      "openshift_docker_image_version", "{{ cfg['openshift_docker_image_version'] }}",
+      "openshift_docker_image_version": "{{ cfg['openshift_docker_image_version'] }}",
 {% else %}
       "deploy_containerized": false,
 {% endif %}
