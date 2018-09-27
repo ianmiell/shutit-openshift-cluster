@@ -17,7 +17,7 @@ machines.update({'master2':{
 	'is_first_etcd':False,
 	'is_first_master':False,
 	'is_lb':False,
-	'is_master':False,
+	'is_master':True,
 	'is_node':True,
 	'region':'NA'
 }})
@@ -28,7 +28,7 @@ machines.update({'master3':{
 	'is_first_etcd':False,
 	'is_first_master':False,
 	'is_lb':False,
-	'is_master':False,
+	'is_master':True,
 	'is_node':True,
 	'region':'NA'
 }})
