@@ -99,7 +99,7 @@ then
 fi
 if [[ $SHUTIT_CLUSTER_CONFIGS = '' ]]
 then
-	SHUTIT_CLUSTER_CONFIGS='test_multi_node_basic_cert_server'
+	SHUTIT_CLUSTER_CONFIGS='test_multi_node_basic'
 fi
 
 if [[ $SHUTIT_INTERACTIVE = '' ]] || ! echo $- | grep i
