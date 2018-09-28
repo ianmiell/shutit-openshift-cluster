@@ -65,7 +65,7 @@ echo 'DO_ADHOC_RESET (blank for default (false))'
 read DO_ADHOC_RESET
 
 
-
+cat last_args_interactive >> last_args_interactive.old
 (
 echo -n '#'
 date
@@ -88,7 +88,7 @@ echo export UPGRADE_36_37=${UPGRADE_36_37}
 echo export DO_ADHOC_RESET=${DO_ADHOC_RESET}
 echo export CHEF_DEPLOY_CONTAINERIZED=${CHEF_DEPLOY_CONTAINERIZED}
 echo ./run_tests.sh
-) >> last_args_interactive
+) > last_args_interactive
 chmod +x last_args_interactive
 
 if [[ $BRANCH_NAME = '' ]]
