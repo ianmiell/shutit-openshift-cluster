@@ -404,6 +404,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		###############################################################################
 
 		# This pause appears to be needed to ensure things settle down. Otherwise it seems that router and registry may die without leaving any obvious trace.
+		shutit_master1_session.send('/etc/init.d/crond stop')
 		shutit_master1_session.send('sleep 600')
 
 		################################################################################
