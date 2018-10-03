@@ -404,7 +404,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		###############################################################################
 
 		# This pause appears to be needed to ensure things settle down. Otherwise it seems that router and registry may die without leaving any obvious trace.
-		shutit_master1_session.send('systemd stop crond')
+		shutit_master1_session.send('systemctl stop crond')
 		shutit_master1_session.send('sleep 600')
 
 		################################################################################
