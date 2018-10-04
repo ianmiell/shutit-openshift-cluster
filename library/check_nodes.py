@@ -1,5 +1,3 @@
-import shutit
-
 def check_nodes(shutit_master1_session, test_config_module, vagrantcommand):
 	# 1) CHECK NODES COME UP
 	shutit_master1_session.send_until('oc --config=/etc/origin/master/admin.kubeconfig get all || tail /tmp/chef.log*','.*kubernetes.*',cadence=60,note='Wait until oc get all returns OK')

@@ -8,13 +8,14 @@ import importlib
 import logging
 import sys
 import time
-import shutit_openshift_cluster_istio
-import shutit_openshift_cluster_vault
+from library import cluster_istio
+from library import cluster_vault
 from library import upgrades
 from library import cluster_test
-import shutit_openshift_cluster_crd
 from library import check_nodes
 from library import cluster_crd
+from library import test_reset
+from library import test_uninstall
 
 from shutit_module import ShutItModule
 
@@ -456,10 +457,10 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		# TEST CLUSTER
 		cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 		if shutit.cfg[self.module_id]['do_adhoc_uninstall']:
-			cluster_test_uninstall.do_uninstall(shutit, test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
+			test_uninstall.do_uninstall(shutit, test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
 			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 		if shutit.cfg[self.module_id]['do_adhoc_reset']:
-			cluster_test_reset.do_reset(shutit, test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
+			test_reset.do_reset(shutit, test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
 			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 
 

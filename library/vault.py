@@ -1,5 +1,3 @@
-# TODO: ovs multitenant plugin? 
-
 def do_vault(s1):
 
 	# Setup/cleanup of pre-existing art.
