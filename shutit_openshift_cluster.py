@@ -8,14 +8,15 @@ import importlib
 import logging
 import sys
 import time
-from library import istio
-from library import vault
-from library import upgrades
-from library import cluster_test
 from library import check_nodes
+from library import cluster_test
+from library import controller
 from library import crd
+from library import istio
 from library import test_reset
 from library import test_uninstall
+from library import upgrades
+from library import vault
 
 from shutit_module import ShutItModule
 

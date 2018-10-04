@@ -25,8 +25,18 @@ names:
   shortnames:
   - ct
 END''')
-	s.send('kubectl create -f resourcedefinition.yaml')
+	s.send('oc create -f resourcedefinition.yaml')
+    s.send('''cat > my-crontab.yaml << END
+apiVersion: "stable.example.com/v1"
+kind: CronTab
+metadata:
+  name: my-new-cron-object
+spec:
+  cronSpec: "* * * * */5"
+  image: my-awesome-cron-image
+END''')
+	s.send('oc create -f my-crontab.yaml')
+	s.send('oc get crontab')
+	s.send('oc get ct -o yaml')
 	s.send('popd')
 
-def do_sample_controller(s):
-	pass
