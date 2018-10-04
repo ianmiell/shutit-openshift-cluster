@@ -1,4 +1,5 @@
 import check_nodes
+import logging
 
 def do_run_apps(shutit_master1_session, shutit):
 	while True:
