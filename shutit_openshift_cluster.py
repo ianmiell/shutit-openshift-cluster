@@ -8,12 +8,12 @@ import importlib
 import logging
 import sys
 import time
-from library import cluster_istio
-from library import cluster_vault
+from library import istio
+from library import vault
 from library import upgrades
 from library import cluster_test
 from library import check_nodes
-from library import cluster_crd
+from library import crd
 from library import test_reset
 from library import test_uninstall
 
@@ -467,15 +467,15 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 
 		# Istio
 		if shutit.cfg[self.module_id]['do_istio']:
-			shutit_openshift_cluster_istio.do_istio(shutit_master1_session)
+			istio.do_istio(shutit_master1_session)
 
 		# Vault
 		if shutit.cfg[self.module_id]['do_vault']:
-			shutit_openshift_cluster_vault.do_vault(shutit_master1_session)
+			vault.do_vault(shutit_master1_session)
 
 		# CRD
-		if shutit.cfg[self.module_id]['do_cluster_crd']:
-			cluster_crd.do_cluster_crd(shutit_master1_session)
+		if shutit.cfg[self.module_id]['do_crd']:
+			crd.do_crd(shutit_master1_session)
 
 		# Upgrades
 		upgrades.do_upgrades(shutit,
@@ -553,7 +553,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		# Vault
 		shutit.get_config(self.module_id,'do_vault',default=False,boolean=True)
 		# Cluster CRD
-		shutit.get_config(self.module_id,'do_cluster_crd',default=False,boolean=True)
+		shutit.get_config(self.module_id,'do_crd',default=False,boolean=True)
 		return True
 
 
