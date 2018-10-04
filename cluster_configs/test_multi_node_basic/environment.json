@@ -49,6 +49,16 @@
           "schedulable": true
         },
         {
+          "fqdn": "{{ test_config_module.machines['master2']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['master2']['ip'] }}"
+          "schedulable": true
+        },
+        {
+          "fqdn": "{{ test_config_module.machines['master3']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['master3']['ip'] }}"
+          "schedulable": true
+        },
+        {
           "fqdn": "{{ test_config_module.machines['node1']['fqdn'] }}",
           "ipaddress": "{{ test_config_module.machines['node1']['ip'] }}",
           "labels": "region=user",
