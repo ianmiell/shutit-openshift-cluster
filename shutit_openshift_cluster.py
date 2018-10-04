@@ -11,8 +11,10 @@ import time
 import shutit_openshift_cluster_istio
 import shutit_openshift_cluster_vault
 import shutit_openshift_upgrades
-import shutit_openshift_cluster_test
-import shutit_openshift_cluster_test_reset
+from library import cluster_test
+import shutit_openshift_cluster_crd
+from library import check_nodes
+from library import cluster_crd
 
 from shutit_module import ShutItModule
 
@@ -384,39 +386,12 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 					shutit_session.send(r'''echo '*/5 * * * * PATH=${PATH}:/usr/sbin chef-client > /tmp/chef.log.`date "+\%H\%M\%S"` 2>&1' | crontab''',note='set up crontab on ' + machine)
 		###############################################################################
 
-		###############################################################################
-		# CHECKS
-		# 1) CHECK NODES COME UP
-		shutit_master1_session.send_until('oc --config=/etc/origin/master/admin.kubeconfig get all || tail /tmp/chef.log*','.*kubernetes.*',cadence=60,note='Wait until oc get all returns OK')
-		for machine in test_config_module.machines.keys():
-			if test_config_module.machines[machine]['is_node']:
-				while not shutit_master1_session.send_until('oc --config=/etc/origin/master/admin.kubeconfig get nodes',machine + '.* Ready.*',cadence=60,retries=10,note='Wait until oc get all returns OK'):
-					shutit_master1_session.logout()
-					shutit_master1_session.logout()
-					# Reboot the machine - this resolves some problems
-					shutit_master1_session.send(vagrantcommand + ' halt ' + machine)
-					shutit_master1_session.multisend(vagrantcommand + ' up --provider ' + vagrant_provider + ' ' + machine,{'assword for':pw})
-					shutit_master1_session.login(command=vagrantcommand + ' ssh master1')
-					shutit_master1_session.login(command='sudo su - ')
-		for machine in test_config_module.machines.keys():
-			if test_config_module.machines[machine]['is_node'] and test_config_module.machines[machine]['region'] not in ('NA',''):
-				shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig label node ' + test_config_module.machines[machine]['fqdn'] + ' region=' + test_config_module.machines[machine]['region'] + ' --overwrite')
-		###############################################################################
-
+		check_nodes.check_nodes(shutit_master1_session, test_config_module, vagrantcommand)
 		# This pause appears to be needed to ensure things settle down. Otherwise it seems that router and registry may die without leaving any obvious trace.
 		shutit_master1_session.send('systemctl stop crond')
 		shutit_master1_session.send('sleep 600')
 
 		################################################################################
-		# SET UP CORE APPS
-		def schedule_nodes(test_config_module, shutit_master1_session):
-			"""Sometimes nodes get unschedulable, so force them temporarily to get mysql app through
-			"""
-			if shutit_master1_session.send_and_get_output('oc --config=/etc/origin/master/admin.kubeconfig get nodes | grep SchedulingDisabled'):
-				for machine in test_config_module.machines.keys():
-					if test_config_module.machines[machine]['is_node']:
-						shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig adm manage-node --schedulable ' + machines[machine]['fqdn'])
-				
 		while True:
 			ok = False
 			count = 40
@@ -444,7 +419,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 				break
 			shutit_master1_session.send("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep -w ^router | awk '{print $1}' | xargs oc --config=/etc/origin/master/admin.kubeconfig delete pod || true""")
 			shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig deploy router --retry || oc --config=/etc/origin/master/admin.kubeconfig deploy router --latest || oc --config=/etc/origin/master/admin.kubeconfig rollout retry dc/router || oc --config=/etc/origin/master/admin.kubeconfig rollout latest dc/router')
-			schedule_nodes(test_config_module, shutit_master1_session)
+			check_nodes.schedule_nodes(test_config_module, shutit_master1_session)
 		while True:
 			ok = False
 			count = 40
@@ -475,41 +450,32 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 				break
 			shutit_master1_session.send("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep -w registry | awk '{print $1}' | xargs oc --config=/etc/origin/master/admin.kubeconfig delete pod || true""")
 			shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig deploy docker-registry --retry || oc --config=/etc/origin/master/admin.kubeconfig deploy docker-registry --latest || oc --config=/etc/origin/master/admin.kubeconfig rollout retry dc/docker-registry || oc --config=/etc/origin/master/admin.kubeconfig rollout latest dc/docker-registry')
-			schedule_nodes(test_config_module, shutit_master1_session)
+			check_nodes.schedule_nodes(test_config_module, shutit_master1_session)
 		################################################################################
 
 		# TEST CLUSTER
-		shutit_openshift_cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
+		cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 		if shutit.cfg[self.module_id]['do_adhoc_uninstall']:
-			shutit_openshift_cluster_test_uninstall.do_uninstall(shutit, test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
-			shutit_openshift_cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
+			cluster_test_uninstall.do_uninstall(shutit, test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
+			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 		if shutit.cfg[self.module_id]['do_adhoc_reset']:
-			shutit_openshift_cluster_test_reset.do_reset(shutit, test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
-			shutit_openshift_cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
+			cluster_test_reset.do_reset(shutit, test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
+			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 
 
 
-		################################################################################
 		# Istio
 		if shutit.cfg[self.module_id]['do_istio']:
-			shutit.login(command=vagrantcommand + ' ssh master1')
-			shutit.login(command='sudo su - ')
-			shutit_openshift_cluster_istio.do_istio(shutit)
-			shutit.logout()
-			shutit.logout()
-		################################################################################
+			shutit_openshift_cluster_istio.do_istio(shutit_master1_session)
 
-		################################################################################
 		# Vault
 		if shutit.cfg[self.module_id]['do_vault']:
-			shutit.login(command=vagrantcommand + ' ssh master1')
-			shutit.login(command='sudo su - ')
-			shutit_openshift_cluster_vault.do_vault(shutit)
-			shutit.logout()
-			shutit.logout()
-		################################################################################
+			shutit_openshift_cluster_vault.do_vault(shutit_master1_session)
 
-		################################################################################
+		# CRD
+		if shutit.cfg[self.module_id]['do_cluster_crd']:
+			cluster_crd.do_cluster_crd(shutit_master1_session)
+
 		# Upgrades
 		shutit_openshift_upgrades.do_upgrades(shutit,
 		                                      test_config_module,
@@ -518,39 +484,15 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		                                      shutit_chefwkstn_session,
 		                                      shutit_master1_session,
 		                                      self.module_id)
-		#################################################################################
 
-		################################################################################
-		# oc adm diagnostics tests
-		################################################################################
-		#test_list also includes: AggregatedLogging MetricsApiProxy NetworkCheck
-		test_list = ('AnalyzeLogs',
-		             'ClusterRegistry',
-		             'ClusterRoleBindings',
-		             'ClusterRoles',
-		             'ClusterRouter',
-		             'ConfigContexts',
-		             'DiagnosticPod',
-		             'MasterConfigCheck',
-		             'MasterNode',
-		             'NodeConfigCheck',
-		             'NodeDefinitions',
-		             'ServiceExternalIPs',
-		             'UnitStatus')
-		for test in test_list:
-			shutit_master1_session.send('oc adm diagnostics ' + test)
-		################################################################################
+		cluster_test.diagnostic_tests(shutit_master1_session)
 
-		################################################################################
 		# User access
 		shutit.pause_point('Build complete and passed OK - interactive access now granted.')
-		################################################################################
 
-		################################################################################
 		# CLEANUP
 		shutit.send(vagrantcommand + ' halt || true',note='Best effort halt and destroy')
 		shutit.send(vagrantcommand + ' destroy -f || true',note='Best effort destroy')
-		################################################################################
 		return True
 
 
@@ -609,6 +551,8 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		shutit.get_config(self.module_id,'do_istio',default=False,boolean=True)
 		# Vault
 		shutit.get_config(self.module_id,'do_vault',default=False,boolean=True)
+		# Cluster CRD
+		shutit.get_config(self.module_id,'do_cluster_crd',default=False,boolean=True)
 		return True
 
 

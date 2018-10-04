@@ -62,3 +62,24 @@ def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_mo
 	for addr in ('kubernetes.default.svc','kubernetes.default.svc.cluster.local'):
 		if shutit_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig -n mysql exec -ti """ + podname + """ -- /bin/sh -c 'resolveip """ + addr + """ -s'""") != '172.30.0.1':
 			shutit_session.pause_point('kubernetes.default.svc.cluster.local did not resolve correctly')
+
+
+
+def diagnostic_tests(shutit_session):
+	
+	#test_list also includes: AggregatedLogging MetricsApiProxy NetworkCheck
+	test_list = ('AnalyzeLogs',
+	             'ClusterRegistry',
+	             'ClusterRoleBindings',
+	             'ClusterRoles',
+	             'ClusterRouter',
+	             'ConfigContexts',
+	             'DiagnosticPod',
+	             'MasterConfigCheck',
+	             'MasterNode',
+	             'NodeConfigCheck',
+	             'NodeDefinitions',
+	             'ServiceExternalIPs',
+	             'UnitStatus')
+	for test in test_list:
+		shutit_master1_session.send('oc adm diagnostics ' + test)
