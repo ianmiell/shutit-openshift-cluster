@@ -299,7 +299,10 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 					#shutit_session.send('git clone https://github.com/openshift/origin',background=True,wait=False,block_other_commands=False)
 					shutit_session.send('mkdir -p /root/chef-solo-example /root/chef-solo-example/cookbooks /root/chef-solo-example/environments /root/chef-solo-example/logs',note='Create chef folders')
 					shutit_session.send('cd /root/chef-solo-example/cookbooks')
-					shutit_session.send('git clone -b ' + shutit.cfg[self.module_id]['cookbook_branch'] + ' https://github.com/IshentRas/cookbook-openshift3',note='Clone chef repo')
+					shutit_session.send('git clone https://github.com/IshentRas/cookbook-openshift3',note='Clone chef repo')
+					shutit_session.send('cd cookbook-openshift3',note='mv into dir')
+					shutit_session.send('git checkout ' + shutit.cfg[self.module_id]['cookbook_branch'],note='Checkout chef repo')
+					shutit_session.send('cd ..',note='Revert dir')
 			# Wait for completion
 			sync(test_config_module, shutit_sessions)
 			# Correct the dependencies
