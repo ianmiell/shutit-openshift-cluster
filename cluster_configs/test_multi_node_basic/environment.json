@@ -32,6 +32,14 @@
         {
           "fqdn": "{{ test_config_module.machines['master1']['fqdn'] }}",
           "ipaddress": "{{ test_config_module.machines['master1']['ip'] }}"
+        },
+        {
+          "fqdn": "{{ test_config_module.machines['master2']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['master2']['ip'] }}"
+        },
+        {
+          "fqdn": "{{ test_config_module.machines['master3']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['master3']['ip'] }}"
         }
       ],
       "node_servers": [
