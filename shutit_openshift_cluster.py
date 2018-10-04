@@ -10,7 +10,7 @@ import sys
 import time
 import shutit_openshift_cluster_istio
 import shutit_openshift_cluster_vault
-import shutit_openshift_upgrades
+from library import upgrades
 from library import cluster_test
 import shutit_openshift_cluster_crd
 from library import check_nodes
@@ -477,13 +477,13 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 			cluster_crd.do_cluster_crd(shutit_master1_session)
 
 		# Upgrades
-		shutit_openshift_upgrades.do_upgrades(shutit,
-		                                      test_config_module,
-		                                      shutit_sessions,
-		                                      check_version,
-		                                      shutit_chefwkstn_session,
-		                                      shutit_master1_session,
-		                                      self.module_id)
+		upgrades.do_upgrades(shutit,
+		                     test_config_module,
+		                     shutit_sessions,
+		                     check_version,
+		                     shutit_chefwkstn_session,
+		                     shutit_master1_session,
+		                     self.module_id)
 
 		cluster_test.diagnostic_tests(shutit_master1_session)
 
