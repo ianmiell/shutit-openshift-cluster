@@ -328,8 +328,8 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 					# Create environment file
 					template = jinja2.Template(open(self_dir + '/cluster_configs/' + shutit.cfg[self.module_id]['test_config_dir'] + '/environment.json').read())
 					shutit_session.send_file('/root/chef-solo-example/environments/ocp-cluster-environment.json',str(template.render(test_config_module=test_config_module,cfg=shutit.cfg[self.module_id])),note='Create environment file')
-					shutit_session.send(r'''echo '*/5 * * * * PATH=${PATH}:/usr/sbin chef-solo --environment ocp-cluster-environment -o '"'"'recipe[cookbook-openshift3]'"'"' -c ~/chef-solo-example/solo.rb > /tmp/chef.log.`date "+\%H\%M\%S"` 2>&1' | crontab''',note='set up crontab on ' + machine)
-					shutit_session.send(r'''chef-solo --environment ocp-cluster-environment -o 'recipe[cookbook-openshift3]' -c ~/chef-solo-example/solo.rb >> /tmp/chef.log.`date "+%H%M%S"` 2>&1 || true''',background=True,wait=False,block_other_commands=False)
+					shutit_session.send(r'''echo '*/5 * * * * PATH=${PATH}:/usr/sbin chef-solo --environment ocp-cluster-environment -o '"'"'recipe[cookbook-openshift3]'"'"' -c ~/chef-solo-example/solo.rb > /tmp/chef.log.`date "+\%s"` 2>&1' | crontab''',note='set up crontab on ' + machine)
+					shutit_session.send(r'''chef-solo --environment ocp-cluster-environment -o 'recipe[cookbook-openshift3]' -c ~/chef-solo-example/solo.rb >> /tmp/chef.log.`date "+%s"` 2>&1 || true''',background=True,wait=False,block_other_commands=False)
 		# chef-server method
 		else:
 			shutit_chefwkstn_session.send('mkdir -p /root/chef-repo/cookbooks')
@@ -385,7 +385,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 			for machine in sorted(test_config_module.machines.keys()):
 				if test_config_module.machines[machine]['fqdn'] not in ('chefserver.vagrant.test','chefwkstn.vagrant.test'):
 					shutit_session = shutit_sessions[machine]
-					shutit_session.send(r'''echo '*/5 * * * * PATH=${PATH}:/usr/sbin chef-client > /tmp/chef.log.`date "+\%H\%M\%S"` 2>&1' | crontab''',note='set up crontab on ' + machine)
+					shutit_session.send(r'''echo '*/5 * * * * PATH=${PATH}:/usr/sbin chef-client > /tmp/chef.log.`date "+\%s"` 2>&1' | crontab''',note='set up crontab on ' + machine)
 		###############################################################################
 
 		check_nodes.check_nodes(shutit_master1_session, test_config_module, vagrantcommand)
