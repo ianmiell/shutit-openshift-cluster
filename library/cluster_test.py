@@ -82,4 +82,4 @@ def diagnostic_tests(shutit_session):
 	             'ServiceExternalIPs',
 	             'UnitStatus')
 	for test in test_list:
-		shutit_master1_session.send('oc adm diagnostics ' + test)
+		shutit_session.send('oc adm diagnostics ' + test)
