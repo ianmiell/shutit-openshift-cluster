@@ -29,3 +29,4 @@ END''')
 	s.send('popd')
 
 def do_sample_controller(s):
+	pass
