@@ -50,12 +50,12 @@
         },
         {
           "fqdn": "{{ test_config_module.machines['master2']['fqdn'] }}",
-          "ipaddress": "{{ test_config_module.machines['master2']['ip'] }}"
+          "ipaddress": "{{ test_config_module.machines['master2']['ip'] }}",
           "schedulable": true
         },
         {
           "fqdn": "{{ test_config_module.machines['master3']['fqdn'] }}",
-          "ipaddress": "{{ test_config_module.machines['master3']['ip'] }}"
+          "ipaddress": "{{ test_config_module.machines['master3']['ip'] }}",
           "schedulable": true
         },
         {
