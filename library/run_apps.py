@@ -3,7 +3,7 @@ import check_nodes
 def do_run_apps(shutit_master1_session, shutit):
 	while True:
 		ok = False
-		count = 40
+		count = 20
 		shutit.log('Iterations left: ' + str(count),level=logging.INFO)
 		while True:
 			status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^router- | grep -v deploy | awk '{print $3}' | grep -v Terminating""")
@@ -31,7 +31,7 @@ def do_run_apps(shutit_master1_session, shutit):
 		check_nodes.schedule_nodes(test_config_module, shutit_master1_session)
 	while True:
 		ok = False
-		count = 40
+		count = 20
 		shutit.log('Iterations left: ' + str(count),level=logging.INFO)
 		while True:
 			# Either registry or docker-registry (more recently?)
@@ -54,9 +54,11 @@ def do_run_apps(shutit_master1_session, shutit):
 				if deploy_status == 'Error':
 					shutit_session.send('oc rollout latest dc/docker-registry')
 			shutit.log('registry while loop done.')
-			if ok:
-				shutit.log('Broken out of outer loop, registry should now be OK.')
-				break
+		if ok:
+			shutit.log('Broken out of outer loop, registry should now be OK.')
+			break
+		else:
+			# Try and rectify
 			shutit_master1_session.send("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep -w registry | awk '{print $1}' | xargs oc --config=/etc/origin/master/admin.kubeconfig delete pod || true""")
 			shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig deploy docker-registry --retry || oc --config=/etc/origin/master/admin.kubeconfig deploy docker-registry --latest || oc --config=/etc/origin/master/admin.kubeconfig rollout retry dc/docker-registry || oc --config=/etc/origin/master/admin.kubeconfig rollout latest dc/docker-registry')
 			check_nodes.schedule_nodes(test_config_module, shutit_master1_session)
