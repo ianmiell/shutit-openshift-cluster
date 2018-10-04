@@ -26,7 +26,7 @@ names:
   - ct
 END''')
 	s.send('oc create -f resourcedefinition.yaml')
-    s.send('''cat > my-crontab.yaml << END
+	s.send('''cat > my-crontab.yaml << END
 apiVersion: "stable.example.com/v1"
 kind: CronTab
 metadata:
