@@ -391,7 +391,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 					shutit_session.send(r'''echo '*/5 * * * * PATH=${PATH}:/usr/sbin chef-client > /tmp/chef.log.`date "+\%s"` 2>&1' | crontab''',note='set up crontab on ' + machine)
 		###############################################################################
 
-		check_nodes.check_nodes(shutit_master1_session, test_config_module, vagrantcommand, vagrant_provider, pw, machines)
+		check_nodes.check_nodes(shutit_master1_session, test_config_module, vagrantcommand, vagrant_provider, pw)
 		# This pause appears to be needed to ensure things settle down. Otherwise it seems that router and registry may die without leaving any obvious trace.
 		shutit_master1_session.send('systemctl stop crond')
 		shutit_master1_session.send('sleep 600')
