@@ -39,4 +39,3 @@ END''')
 	s.send('oc get crontab')
 	s.send('oc get ct -o yaml')
 	s.send('popd')
-

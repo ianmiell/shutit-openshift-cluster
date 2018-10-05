@@ -66,7 +66,7 @@ def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_mo
 
 
 def diagnostic_tests(shutit_session):
-	
+
 	#test_list also includes: AggregatedLogging MetricsApiProxy NetworkCheck
 	test_list = ('AnalyzeLogs',
 	             'ClusterRegistry',

@@ -1,5 +1,5 @@
 import time
-import cluster_test
+from library import cluster_test
 
 def do_upgrades(shutit, test_config_module, shutit_sessions, check_version, shutit_chefwkstn_session, shutit_master1_session, module_id):
 
@@ -119,7 +119,7 @@ def do_upgrades(shutit, test_config_module, shutit_sessions, check_version, shut
 			assert check_version(shutit_sessions['master1'],'1.5'), shutit.pause_point("assertion failure: shutit_sessions['master1'],'1.5'")
 			shutit_session = shutit_sessions[machine]
 			crontab_on(shutit_session)
-		shutit_openshift_cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
+		cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 
 	# 1.5 => 3.6
 	if shutit.cfg[module_id]['do_upgrade_15_36']:
@@ -229,7 +229,7 @@ def do_upgrades(shutit, test_config_module, shutit_sessions, check_version, shut
 			assert check_version(shutit_sessions['master1'],'3.6'), shutit.pause_point("assertion failure: shutit_sessions['master1'],'3.6'")
 			shutit_session = shutit_sessions[machine]
 			crontab_on(shutit_session)
-		shutit_openshift_cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
+		cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 
 	# 3.6 => 3.7
 	if shutit.cfg[module_id]['do_upgrade_36_37']:
@@ -356,7 +356,7 @@ def do_upgrades(shutit, test_config_module, shutit_sessions, check_version, shut
 			crontab_on(shutit_session)
 		redeploy_components(shutit_master1_session)
 		time.sleep(2*60)
-		shutit_openshift_cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
+		cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 
 	# 3.7 => 3.9
 	if shutit.cfg[module_id]['do_upgrade_37_39']:
@@ -486,5 +486,4 @@ def do_upgrades(shutit, test_config_module, shutit_sessions, check_version, shut
 			assert check_version(shutit_sessions['master1'],'3.9'), shutit.pause_point("assertion failure: shutit_sessions['master1'],'3.9'")
 			shutit_session = shutit_sessions[machine]
 			crontab_on(shutit_session)
-		shutit_openshift_cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
-
+		cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)

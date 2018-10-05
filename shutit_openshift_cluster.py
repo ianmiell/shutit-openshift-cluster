@@ -3,11 +3,11 @@ import datetime
 import inspect
 import string
 import os
-import jinja2
 import importlib
 import logging
 import sys
 import time
+import jinja2
 from library import check_nodes
 from library import cluster_test
 from library import controller
@@ -94,7 +94,6 @@ class shutit_openshift_cluster(ShutItModule):
 		################################################################################
 		# VAGRANT UP
 		# Collect the - expect machines dict to be set up here
-		vagrantfile = 'Vagrantfile.' + shutit.cfg[self.module_id]['chef_deploy_method']
 		vagrantcommand = 'vagrant'
 		test_config_module = importlib.import_module('cluster_configs.' + shutit.cfg[self.module_id]['test_config_dir'] + '.machines_' + shutit.cfg[self.module_id]['chef_deploy_method'])
 		self_dir = os.path.dirname(os.path.abspath(inspect.getsourcefile(lambda:0)))
@@ -392,12 +391,12 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 					shutit_session.send(r'''echo '*/5 * * * * PATH=${PATH}:/usr/sbin chef-client > /tmp/chef.log.`date "+\%s"` 2>&1' | crontab''',note='set up crontab on ' + machine)
 		###############################################################################
 
-		check_nodes.check_nodes(shutit_master1_session, test_config_module, vagrantcommand)
+		check_nodes.check_nodes(shutit_master1_session, test_config_module, vagrantcommand, vagrant_provider, pw, machines)
 		# This pause appears to be needed to ensure things settle down. Otherwise it seems that router and registry may die without leaving any obvious trace.
 		shutit_master1_session.send('systemctl stop crond')
 		shutit_master1_session.send('sleep 600')
 
-		run_apps.do_run_apps(shutit_master1_session, shutit)
+		run_apps.do_run_apps(test_config_module, shutit_master1_session, shutit, shutit_session)
 
 		# Test cluster
 		cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
@@ -409,13 +408,13 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 
 		# Ad hoc reset
 		if shutit.cfg[self.module_id]['do_adhoc_reset']:
-			test_reset.do_reset(shutit, test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
+			test_reset.do_reset(test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
 			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 
 
 		# Istio
 		if shutit.cfg[self.module_id]['do_istio']:
-			istio.do_istio(shutit_master1_session)
+			istio.install_istio(shutit_master1_session)
 
 		# Vault
 		if shutit.cfg[self.module_id]['do_vault']:
@@ -423,7 +422,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 
 		# CRD
 		if shutit.cfg[self.module_id]['do_crd']:
-			crd.do_crd(shutit_master1_session)
+			crd.do_crd_simple(shutit_master1_session)
 
 		# Upgrades
 		upgrades.do_upgrades(shutit,

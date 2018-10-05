@@ -1,6 +1,5 @@
-
 def do_controller(s):
-	s.send('wget -qO- https://dl.google.com/go/go1.10.3.linux-amd64.tar.gz | tar -zxvf -') 
+	s.send('wget -qO- https://dl.google.com/go/go1.10.3.linux-amd64.tar.gz | tar -zxvf -')
 	s.send('mv go /usr/local')
 	s.send('mkdir /root/go')
 	s.send('export GOROOT=/usr/local/go')
@@ -13,4 +12,3 @@ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 END''')
 	s.send('go version')
 	s.send('go env')
-

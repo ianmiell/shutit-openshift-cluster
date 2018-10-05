@@ -1,6 +1,6 @@
 import time
 
-def do_reset(shutit, test_config_module, shutit_sessions, chef_deploy_method):
+def do_reset(test_config_module, shutit_sessions, chef_deploy_method):
 	for machine in test_config_module.machines.keys():
 		shutit_session = shutit_sessions[machine]
 		shutit_session.send('systemd stop crond')

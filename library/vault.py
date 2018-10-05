@@ -64,6 +64,3 @@ def do_vault(s1):
 	s1.send('oc expose svc spring-example')
 	s1.send("""export SPRING_EXAMPLE_ADDR=http://$(oc get route | grep -m1 spring | awk '{print $2}')""")
 	s1.send('curl $SPRING_EXAMPLE_ADDR/secret')
-
-if __name__ == '__main__':
-	setup()
