@@ -392,9 +392,11 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		###############################################################################
 
 		check_nodes.check_nodes(shutit_master1_session, test_config_module, vagrantcommand, vagrant_provider, pw)
-		# This pause appears to be needed to ensure things settle down. Otherwise it seems that router and registry may die without leaving any obvious trace.
 		shutit_master1_session.send('systemctl stop crond')
-		shutit_master1_session.send('sleep 600')
+		# This pause appears to be needed to ensure things settle down. Otherwise it seems that router and registry may die without leaving any obvious trace.
+		shutit_master1_session.send('sleep 60')
+		check_nodes.label_nodes(shutit_master1_session, test_config_module)
+		shutit_master1_session.send('sleep 540')
 
 		run_apps.do_run_apps(test_config_module, shutit_master1_session, shutit, shutit_session)
 
