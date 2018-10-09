@@ -3,16 +3,16 @@ import time
 
 def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module):
 
-	for machine in test_config_module.machines.keys():
-		shutit_session = shutit_sessions[machine]
-		shutit_session.send('cd /etc/sysconfig')
-		shutit_session.send(r'''for f in $(ls origin*); do sed -i 's/OPTIONS=.*--loglevel=.*/OPTIONS="--loglevel=8"/' $f; done''')
-		shutit_session.send(r'''systemctl restart origin-master-api''', check_exit=False)
-		shutit_session.send(r'''systemctl restart origin-master-controllers''', check_exit=False)
-		shutit_session.send(r'''systemctl restart origin-master''', check_exit=False)
-		shutit_session.send(r'''systemctl restart origin-node''', check_exit=False)
-		shutit_session.send('cd -')
-	shutit_master1_session.send('sleep 600')
+	#for machine in test_config_module.machines.keys():
+	#	shutit_session = shutit_sessions[machine]
+	#	shutit_session.send('cd /etc/sysconfig')
+	#	shutit_session.send(r'''for f in $(ls origin*); do sed -i 's/OPTIONS=.*--loglevel=.*/OPTIONS="--loglevel=8"/' $f; done''')
+	#	shutit_session.send(r'''systemctl restart origin-master-api''', check_exit=False)
+	#	shutit_session.send(r'''systemctl restart origin-master-controllers''', check_exit=False)
+	#	shutit_session.send(r'''systemctl restart origin-master''', check_exit=False)
+	#	shutit_session.send(r'''systemctl restart origin-node''', check_exit=False)
+	#	shutit_session.send('cd -')
+	#shutit_master1_session.send('sleep 600')
 
 	shutit_session = shutit_master1_session
 	# Create a mysql application
