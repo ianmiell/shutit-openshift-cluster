@@ -67,7 +67,6 @@
       "openshift_node_docker-storage": {
         "VG": "docker-vg"
       },
-      "openshift_master_loopback_api_url": "master1.vagrant.test",
       "ose_major_version": "{{ cfg['ose_major_version'] }}"
 {% if cfg['ose_version'] != '3.6' %}
       , "ose_version": "{{ cfg['ose_version'] }}"
