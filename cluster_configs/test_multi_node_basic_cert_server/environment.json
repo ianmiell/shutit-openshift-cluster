@@ -13,7 +13,6 @@
 {% else %}
       "deploy_containerized": false,
 {% endif %}
-      "deploy_dnsmasq" : true,
       "certificate_server": {
         "fqdn": "{{ test_config_module.machines['certserver']['fqdn'] }}",
         "ipaddress": "{{ test_config_module.machines['certserver']['ip'] }}"
@@ -37,12 +36,33 @@
         {
           "fqdn": "{{ test_config_module.machines['master1']['fqdn'] }}",
           "ipaddress": "{{ test_config_module.machines['master1']['ip'] }}"
+        },
+        {
+          "fqdn": "{{ test_config_module.machines['master2']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['master2']['ip'] }}"
+        },
+        {
+          "fqdn": "{{ test_config_module.machines['master3']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['master3']['ip'] }}"
         }
       ],
       "node_servers": [
         {
           "fqdn": "{{ test_config_module.machines['master1']['fqdn'] }}",
           "ipaddress": "{{ test_config_module.machines['master1']['ip'] }}",
+          "labels": "region=infra",
+          "schedulable": true
+        },
+        {
+          "fqdn": "{{ test_config_module.machines['master2']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['master2']['ip'] }}",
+          "labels": "region=infra",
+          "schedulable": true
+        },
+        {
+          "fqdn": "{{ test_config_module.machines['master3']['fqdn'] }}",
+          "ipaddress": "{{ test_config_module.machines['master3']['ip'] }}",
+          "labels": "region=infra",
           "schedulable": true
         },
         {
@@ -59,6 +79,11 @@
         }
       ],
       "openshift_HA": true,
+      "openshift_builddefaults_env": [
+        {
+          "NO_PROXY": "master1.vagrant.test"
+        }
+      ],
       "openshift_cluster_name": "{{ test_config_module.machines['master1']['fqdn'] }}",
       "openshift_common_sdn_network_plugin_name": "redhat/openshift-ovs-multitenant",
       "openshift_deployment_type": "origin",
@@ -71,7 +96,7 @@
 {% if cfg['ose_version'] != '3.6' %}
       , "ose_version": "{{ cfg['ose_version'] }}"
 {% endif %}
-{% if cfg['ose_version'] >= '3' %}
+{% if cfg['ose_version'] > '3' %}
       , "osn_cluster_dns_ip": "10.0.2.15"
 {% endif %}
     }
