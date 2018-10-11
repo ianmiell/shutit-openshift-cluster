@@ -235,7 +235,6 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 			shutit_chefwkstn_session.send('cd /root')
 			shutit_chefwkstn_session.send('chef generate repo chef-repo')
 			shutit_chefwkstn_session.send('cd /root/chef-repo')
-			shutit_chefwkstn_session.send('chef verify')
 			shutit_chefwkstn_session.send('''echo 'eval "$(chef shell-init bash)"' >> /root/.bash_profile''')
 			shutit_chefwkstn_session.send('source /root/.bash_profile')
 			shutit_chefwkstn_session.send('mkdir -p /etc/chef')
@@ -393,8 +392,6 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 
 		check_nodes.check_nodes(shutit_master1_session, test_config_module, vagrantcommand, vagrant_provider, pw)
 		shutit_master1_session.send('systemctl stop crond')
-		# This pause appears to be needed to ensure things settle down. Otherwise it seems that router and registry may die without leaving any obvious trace.
-		shutit_master1_session.send('sleep 60')
 		check_nodes.label_nodes(shutit_master1_session, test_config_module)
 
 		run_apps.do_run_apps(test_config_module, shutit_master1_session, shutit, shutit_session)
