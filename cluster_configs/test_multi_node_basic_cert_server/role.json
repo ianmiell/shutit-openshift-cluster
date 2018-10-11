@@ -21,7 +21,6 @@
       "openshift_deployment_type": "origin",
       "openshift_hosted_managed_router": false,
       "openshift_hosted_managed_registry": false,
-      "openshift_master_loopback_api_url": "master1.vagrant.test",
       "openshift_node_docker-storage": {
         "VG": "docker-vg"
       },
