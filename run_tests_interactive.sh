@@ -2,8 +2,9 @@
 set -e
 
 BRANCH_NAME_DEFAULT="master"
+OSE_VERSION_DEFAULT=3.9
 
-echo 'OSE_VERSIONS eg 1.3 1.4 1.5 3.6 3.7 3.9 (blank for default (usually last one))'
+echo "OSE_VERSIONS eg 1.3 1.4 1.5 3.6 3.7 3.9 (blank for default ($OSE_VERSION_DEFAULT))"
 read OSE_VERSIONS
 
 echo "SHUTIT_CLUSTER_CONFIGS eg $(ls cluster_configs) (blank for default)"
@@ -60,9 +61,14 @@ read CHEF_IPTABLES_COOKBOOK_VERSION
 
 echo 'DO_ADHOC_UNINSTALL (blank for default (false))'
 read DO_ADHOC_UNINSTALL
-
 echo 'DO_ADHOC_RESET (blank for default (false))'
 read DO_ADHOC_RESET
+echo 'DO_VAULT (blank for default (false))'
+read DO_VAULT
+echo 'DO_ISTIO (blank for default (false))'
+read DO_ISTIO
+echo 'DO_CRD (blank for default (false))'
+read DO_CRD
 
 
 cat last_args_interactive >> last_args_interactive.old
@@ -70,7 +76,7 @@ cat last_args_interactive >> last_args_interactive.old
 echo -n '#'
 date
 echo export BRANCH_NAME=${BRANCH_NAME}
-echo export OSE_VERSIONS=${OSE_VERSIONS}
+echo export OSE_VERSIONS=${OSE_VERSIONS:-$OSE_VERSION_DEFAULT}
 echo export CHEF_VERSION=${CHEF_VERSION}
 echo export CHEF_YUM_COOKBOOK_VERSION=${CHEF_YUM_COOKBOOK_VERSION}
 echo export CHEF_SELINUX_COOKBOOK_VERSION=${CHEF_SELINUX_COOKBOOK_VERSION}
@@ -81,11 +87,14 @@ echo export CHEF_DEPLOY_METHODS=${CHEF_DEPLOY_METHODS}
 echo export SHUTIT_CLUSTER_CONFIGS=${SHUTIT_CLUSTER_CONFIGS}
 echo export SHUTIT_INTERACTIVE=${SHUTIT_INTERACTIVE}
 echo export DO_ADHOC_UNINSTALL=${DO_ADHOC_UNINSTALL}
+echo export DO_ADHOC_RESET=${DO_ADHOC_RESET}
+echo export DO_VAULT=${DO_VAULT}
+echo export DO_ISTIO=${DO_ISTIO}
+echo export DO_CRD=${DO_CRD}
 echo export UPGRADE_13_14=${UPGRADE_13_14}
 echo export UPGRADE_14_15=${UPGRADE_14_15}
 echo export UPGRADE_15_36=${UPGRADE_15_36}
 echo export UPGRADE_36_37=${UPGRADE_36_37}
-echo export DO_ADHOC_RESET=${DO_ADHOC_RESET}
 echo export CHEF_DEPLOY_CONTAINERIZED=${CHEF_DEPLOY_CONTAINERIZED}
 echo ./run_tests.sh
 ) > last_args_interactive
@@ -96,13 +105,6 @@ then
 	export BRANCH_NAME="master"
 else
 	export BRANCH_NAME="$BRANCH_NAME_DEFAULT"
-fi
-
-if [[ $OSE_VERSIONS = '' ]]
-then
-	export OSE_VERSIONS='1.3 1.4 1.5 3.6'
-else
-	export OSE_VERSIONS="$OSE_VERSIONS"
 fi
 
 if [[ $CHEF_VERSION = '' ]]

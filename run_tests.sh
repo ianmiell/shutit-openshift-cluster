@@ -36,6 +36,9 @@ SHUTIT_MODULE_NAME='tk.shutit.shutit_openshift_cluster.shutit_openshift_cluster'
 # UPGRADE_15_36 - if non-empty and not false, upgrade from 1.5 to 3.6
 # UPGRADE_36_37 - if non-empty and not false, upgrade from 3.6 to 3.7
 # UPGRADE_37_39 - if non-empty and not false, upgrade from 3.7 to 3.9
+# DO_ISTIO      - istio
+# DO_VAULT      - vault
+# DO_CRD        - crd
 
 if [[ $BRANCH_NAME = '' ]]
 then
@@ -64,6 +67,27 @@ then
 	DO_ADHOC_UNINSTALL='false'
 else
 	DO_ADHOC_UNINSTALL='true'
+fi
+
+if [[ $DO_ISTIO = '' ]] || [[ $DO_ISTIO = 'false' ]]
+then
+	DO_ISTIO='false'
+else
+	DO_ISTIO='true'
+fi
+
+if [[ $DO_VAULT = '' ]] || [[ $DO_VAULT = 'false' ]]
+then
+	DO_VAULT='false'
+else
+	DO_VAULT='true'
+fi
+
+if [[ $DO_CRD = '' ]] || [[ $DO_CRD = 'false' ]]
+then
+	DO_CRD='false'
+else
+	DO_CRD='true'
 fi
 
 if [[ $DO_ADHOC_RESET = '' ]] || [[ $DO_ADHOC_RESET = 'false' ]]
@@ -215,6 +239,9 @@ do
 					-s ${SHUTIT_MODULE_NAME} do_upgrade_15_36                      ${UPGRADE_15_36} \
 					-s ${SHUTIT_MODULE_NAME} do_upgrade_36_37                      ${UPGRADE_36_37} \
 					-s ${SHUTIT_MODULE_NAME} do_upgrade_37_39                      ${UPGRADE_37_39} \
+					-s ${SHUTIT_MODULE_NAME} do_istio                              ${DO_ISTIO} \
+					-s ${SHUTIT_MODULE_NAME} do_vault                              ${DO_VAULT} \
+					-s ${SHUTIT_MODULE_NAME} do_crd                                ${DO_CRD} \
 					-s ${SHUTIT_MODULE_NAME} openshift_docker_image_version        ${ose_docker_image_version} \
 					-s ${SHUTIT_MODULE_NAME} adhoc_uninstall                       ${DO_ADHOC_UNINSTALL} \
 					-s ${SHUTIT_MODULE_NAME} adhoc_reset                           ${DO_ADHOC_RESET} \
