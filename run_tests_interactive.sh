@@ -69,6 +69,8 @@ echo 'DO_ISTIO (blank for default (false))'
 read DO_ISTIO
 echo 'DO_CRD (blank for default (false))'
 read DO_CRD
+echo 'DO_CONTROLLER (blank for default (false))'
+read DO_CONTROLLER
 
 
 cat last_args_interactive >> last_args_interactive.old
@@ -91,6 +93,7 @@ echo export DO_ADHOC_RESET=${DO_ADHOC_RESET}
 echo export DO_VAULT=${DO_VAULT}
 echo export DO_ISTIO=${DO_ISTIO}
 echo export DO_CRD=${DO_CRD}
+echo export DO_CONTROLLER=${DO_CONTROLLER}
 echo export UPGRADE_13_14=${UPGRADE_13_14}
 echo export UPGRADE_14_15=${UPGRADE_14_15}
 echo export UPGRADE_15_36=${UPGRADE_15_36}

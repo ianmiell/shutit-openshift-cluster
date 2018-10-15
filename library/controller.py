@@ -12,3 +12,4 @@ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 END''')
 	s.send('go version')
 	s.send('go env')
+	

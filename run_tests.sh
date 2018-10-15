@@ -39,6 +39,7 @@ SHUTIT_MODULE_NAME='tk.shutit.shutit_openshift_cluster.shutit_openshift_cluster'
 # DO_ISTIO      - istio
 # DO_VAULT      - vault
 # DO_CRD        - crd
+# DO_CONTROLLER - controller
 
 if [[ $BRANCH_NAME = '' ]]
 then
@@ -89,6 +90,12 @@ then
 else
 	DO_CRD='true'
 fi
+
+if [[ $DO_CONTROLLER = '' ]] || [[ $DO_CONTROLLER = 'false' ]]
+then
+	DO_CONTROLLER='false'
+else
+	DO_CONTROLLER='true'
 
 if [[ $DO_ADHOC_RESET = '' ]] || [[ $DO_ADHOC_RESET = 'false' ]]
 then
@@ -242,6 +249,7 @@ do
 					-s ${SHUTIT_MODULE_NAME} do_istio                              ${DO_ISTIO} \
 					-s ${SHUTIT_MODULE_NAME} do_vault                              ${DO_VAULT} \
 					-s ${SHUTIT_MODULE_NAME} do_crd                                ${DO_CRD} \
+					-s ${SHUTIT_MODULE_NAME} do_controller                         ${DO_CONTROLLER} \
 					-s ${SHUTIT_MODULE_NAME} openshift_docker_image_version        ${ose_docker_image_version} \
 					-s ${SHUTIT_MODULE_NAME} adhoc_uninstall                       ${DO_ADHOC_UNINSTALL} \
 					-s ${SHUTIT_MODULE_NAME} adhoc_reset                           ${DO_ADHOC_RESET} \

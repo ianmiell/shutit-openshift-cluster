@@ -422,6 +422,10 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		if shutit.cfg[self.module_id]['do_crd']:
 			crd.do_crd_simple(shutit_master1_session)
 
+		# Controller
+		if shutit.cfg[self.module_id]['do_controller']:
+			crd.do_controller_simple(shutit_master1_session)
+
 		# Upgrades
 		upgrades.do_upgrades(shutit,
 		                     test_config_module,
@@ -500,6 +504,8 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		shutit.get_config(self.module_id,'do_vault',default=False,boolean=True)
 		# Cluster CRD
 		shutit.get_config(self.module_id,'do_crd',default=False,boolean=True)
+		# Controller
+		shutit.get_config(self.module_id,'do_controller',default=False,boolean=True)
 		return True
 
 
