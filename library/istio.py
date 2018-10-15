@@ -21,13 +21,13 @@ def install_istio(s):
 	s.send('kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml')
 	s.send('kubectl apply -f install/kubernetes/istio-demo-auth.yaml')
 	#Ensure the following Kubernetes services are deployed: istio-pilot, istio-ingressgateway, istio-policy, istio-telemetry, prometheus, istio-galley, and, optionally, istio-sidecar-injector.
-	s.send('[ $(kubectl get svc -n istio-system | grep istio-pilot | wc -l) = '1' ]')
-	s.send('[ $(kubectl get svc -n istio-system | grep istio-ingressgateway | wc -l) = '1' ]')
-	s.send('[ $(kubectl get svc -n istio-system | grep istio-policy | wc -l) = '1']')
-	s.send('[ $(kubectl get svc -n istio-system | grep istio-telemetry | wc -l) = '1']')
-	s.send('[ $(kubectl get svc -n istio-system | grep prometheus | wc -l) = '1' ]')
-	s.send('[ $(kubectl get svc -n istio-system | grep istio-galley | wc -l) = '1' ]')
-	s.send('[ $(kubectl get svc -n istio-system | grep istio-sidecar-injector | wc -l) = '1' ]')
+	s.send('''[ $(kubectl get svc -n istio-system | grep istio-pilot | wc -l) = '1' ]''')
+	s.send('''[ $(kubectl get svc -n istio-system | grep istio-ingressgateway | wc -l) = '1' ]''')
+	s.send('''[ $(kubectl get svc -n istio-system | grep istio-policy | wc -l) = '1']''')
+	s.send('''[ $(kubectl get svc -n istio-system | grep istio-telemetry | wc -l) = '1']''')
+	s.send('''[ $(kubectl get svc -n istio-system | grep prometheus | wc -l) = '1' ]''')
+	s.send('''[ $(kubectl get svc -n istio-system | grep istio-galley | wc -l) = '1' ]''')
+	s.send('''[ $(kubectl get svc -n istio-system | grep istio-sidecar-injector | wc -l) = '1' ]''')
 	s.pause_point('openshift')
 
 
