@@ -2,29 +2,38 @@ def install_istio(s):
 
 	# https://istio.io/docs/setup/kubernetes/quick-start/
 
-	# From: https://blog.openshift.com/evaluate-istio-openshift/?sc_cid=7016000000127iCAAQ
+	
+
+	# https://istio.io/docs/setup/kubernetes/platform-setup/openshift/
+	# OLD, IGNORE:From: https://blog.openshift.com/evaluate-istio-openshift/?sc_cid=7016000000127iCAAQ
 	s.send('oc new-project istio-system')
 	s.send('oc project istio-system')
-	s.send('oc adm policy add-scc-to-user anyuid -z istio-ingress-service-account')
-	s.send('oc adm policy add-scc-to-user privileged -z istio-ingress-service-account')
-	s.send('oc adm policy add-scc-to-user anyuid -z istio-egress-service-account')
-	s.send('oc adm policy add-scc-to-user privileged -z istio-egress-service-account')
-	s.send('oc adm policy add-scc-to-user anyuid -z istio-pilot-service-account')
-	s.send('oc adm policy add-scc-to-user privileged -z istio-pilot-service-account')
-	s.send('oc adm policy add-scc-to-user anyuid -z default')
-	s.send('oc adm policy add-scc-to-user privileged -z default')
-	s.send('oc adm policy add-cluster-role-to-user cluster-admin -z default')
+	s.send('oc adm policy add-scc-to-user anyuid -z istio-ingress-service-account -n istio-system')
+	s.send('oc adm policy add-scc-to-user anyuid -z default -n istio-system')
+	s.send('oc adm policy add-scc-to-user anyuid -z prometheus -n istio-system')
+	s.send('oc adm policy add-scc-to-user anyuid -z istio-egressgateway-service-account -n istio-system')
+	s.send('oc adm policy add-scc-to-user anyuid -z istio-citadel-service-account -n istio-system')
+	s.send('oc adm policy add-scc-to-user anyuid -z istio-ingressgateway-service-account -n istio-system')
+	s.send('oc adm policy add-scc-to-user anyuid -z istio-cleanup-old-ca-service-account -n istio-system')
+	s.send('oc adm policy add-scc-to-user anyuid -z istio-mixer-post-install-account -n istio-system')
+	s.send('oc adm policy add-scc-to-user anyuid -z istio-mixer-service-account -n istio-system')
+	s.send('oc adm policy add-scc-to-user anyuid -z istio-pilot-service-account -n istio-system')
+	s.send('oc adm policy add-scc-to-user anyuid -z istio-sidecar-injector-service-account -n istio-system')
+	s.send('oc adm policy add-scc-to-user anyuid -z istio-galley-service-account -n istio-system')
+	s.send('oc adm policy add-scc-to-user privileged -z default -n istio-system')
+	#s.send('oc adm policy add-cluster-role-to-user cluster-admin -z default')
 	# From: https://github.com/istio/istio
 	s.send('cd /root')
 	s.send('curl -L https://git.io/getLatestIstio | sh -')
+	s.send('cd istio*')
 	s.send('export PATH="$PATH:$(pwd)/bin"')
 	s.send('kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml')
 	s.send('kubectl apply -f install/kubernetes/istio-demo-auth.yaml')
 	#Ensure the following Kubernetes services are deployed: istio-pilot, istio-ingressgateway, istio-policy, istio-telemetry, prometheus, istio-galley, and, optionally, istio-sidecar-injector.
 	s.send('''[ $(kubectl get svc -n istio-system | grep istio-pilot | wc -l) = '1' ]''')
 	s.send('''[ $(kubectl get svc -n istio-system | grep istio-ingressgateway | wc -l) = '1' ]''')
-	s.send('''[ $(kubectl get svc -n istio-system | grep istio-policy | wc -l) = '1']''')
-	s.send('''[ $(kubectl get svc -n istio-system | grep istio-telemetry | wc -l) = '1']''')
+	s.send('''[ $(kubectl get svc -n istio-system | grep istio-policy | wc -l) = '1' ]''')
+	s.send('''[ $(kubectl get svc -n istio-system | grep istio-telemetry | wc -l) = '1' ]''')
 	s.send('''[ $(kubectl get svc -n istio-system | grep prometheus | wc -l) = '1' ]''')
 	s.send('''[ $(kubectl get svc -n istio-system | grep istio-galley | wc -l) = '1' ]''')
 	s.send('''[ $(kubectl get svc -n istio-system | grep istio-sidecar-injector | wc -l) = '1' ]''')
