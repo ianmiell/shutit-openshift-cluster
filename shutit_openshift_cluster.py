@@ -424,7 +424,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 
 		# Controller
 		if shutit.cfg[self.module_id]['do_controller']:
-			crd.do_controller_simple(shutit_master1_session)
+			crd.do_controller(shutit_master1_session)
 
 		# Upgrades
 		upgrades.do_upgrades(shutit,
