@@ -12,4 +12,10 @@ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 END''')
 	s.send('go version')
 	s.send('go env')
-	
+	s.send('cd /root')
+	s.send('git clone https://github.com/kubernetes/code-generator')
+	s.send('git clone https://github.com/kubernetes/sample-controller')
+	s.send('go get k8s.io/sample-controller')
+	s.send('cd $GOROOT/src/k8s.io/sample-controller')
+	s.send('go build .')
+	s.pause_point('')
