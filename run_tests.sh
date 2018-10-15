@@ -96,6 +96,7 @@ then
 	DO_CONTROLLER='false'
 else
 	DO_CONTROLLER='true'
+fi
 
 if [[ $DO_ADHOC_RESET = '' ]] || [[ $DO_ADHOC_RESET = 'false' ]]
 then
