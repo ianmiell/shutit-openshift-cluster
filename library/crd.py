@@ -1,4 +1,4 @@
-def do_crd_simple(s):
+def do_crd(s):
 	s.send('mkdir crd_simple')
 	s.send('pushd crd_simple')
 	s.send('''cat > resourcedefinition.yaml << END

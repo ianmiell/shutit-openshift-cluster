@@ -420,7 +420,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 
 		# CRD
 		if shutit.cfg[self.module_id]['do_crd']:
-			crd.do_crd_simple(shutit_master1_session)
+			crd.do_crd(shutit_master1_session)
 
 		# Controller
 		if shutit.cfg[self.module_id]['do_controller']:
