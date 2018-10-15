@@ -409,6 +409,11 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 			test_reset.do_reset(test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
 			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 
+		# Set up golang environment on master1
+		shutit_master1_session.send('cd /root')
+		shutit_master1_session.send('wget -qO- https://dl.google.com/go/go1.11.1.linux-amd64.tar.gz | tar -zxvf -')
+		shutit_master1_session.send('PATH=${PATH}:/root/go/bin')
+		shutit_master1_session.send("""GOPATH='/root/go'""")
 
 		# Istio
 		if shutit.cfg[self.module_id]['do_istio']:
