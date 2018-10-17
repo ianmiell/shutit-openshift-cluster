@@ -436,7 +436,7 @@ END''')
 
 		# Controller
 		if shutit.cfg[self.module_id]['do_controller']:
-			crd.do_controller(shutit_master1_session)
+			controller.do_controller(shutit_master1_session)
 
 		# Upgrades
 		upgrades.do_upgrades(shutit,
