@@ -410,7 +410,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 
 		# Set up golang environment on master1
-		shutit_master1_session.send('wget -qO- https://dl.google.com/go/go1.10.3.linux-amd64.tar.gz | tar -zxvf -')
+		shutit_master1_session.send('wget -qO- https://dl.google.com/go/go1.11.1.linux-amd64.tar.gz | tar -zxvf -')
 		shutit_master1_session.send('mv go /usr/local')
 		shutit_master1_session.send('mkdir /root/go')
 		shutit_master1_session.send('export GOROOT=/usr/local/go')
