@@ -412,6 +412,11 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		###########################
 		# EXTRA SETUPS
 		# Set up golang environment on master1
+		# Helm
+		shutit_master1_session.send('curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh')
+		shutit_master1_session.send('chmod 700 get_helm.sh')
+		shutit_master1_session.send('./get_helm.sh')
+		shutit_master1_session.send('rm get_helm.sh')
 		# Docker login
 		shutit_master1_session.multisend('docker login docker.io',{'Username:':docker_uname,'assword':docker_pw})
 		shutit_master1_session.send('wget -qO- https://dl.google.com/go/go1.11.1.linux-amd64.tar.gz | tar -zxvf -')
@@ -427,10 +432,10 @@ export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 END''')
 
 		# Create privileged project to work in (to remove scc limits)
-		shutit_master_1_session.send('oc adm new-project privileged')
-		shutit_master_1_session.send('oadm policy add-scc-to-user anyuid -z privileged')
+		shutit_master1_session.send('oc adm new-project privileged')
+		shutit_master1_session.send('oadm policy add-scc-to-user anyuid -z privileged')
 		# Alternative method?
-#		shutit_master_1_session.send('''oc patch namespace privileged -p "apiVersion: v1
+#		shutit_master1_session.send('''oc patch namespace privileged -p "apiVersion: v1
 #kind: Namespace
 #metadata:
 #  annotations:

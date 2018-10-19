@@ -186,3 +186,31 @@ END''')
 #END
 #kubectl apply -f deploy.yaml
 #=========================================
+
+
+	# KUBEBUILDER
+	# Read this: https://itnext.io/building-an-operator-for-kubernetes-with-kubebuilder-17cbd3f07761
+	# From: https://book.kubebuilder.io/quick_start.html
+	s.send('version=1.0.4 # latest stable version')
+	s.send('arch=amd64')
+	s.send('curl -L -O https://github.com/kubernetes-sigs/kubebuilder/releases/download/v${version}/kubebuilder_${version}_darwin_${arch}.tar.gz')
+	s.send('tar -zxvf kubebuilder_${version}_darwin_${arch}.tar.gz')
+	s.send('mv kubebuilder_${version}_darwin_${arch} /usr/local/kubebuilder')
+	s.send('export PATH=$PATH:/usr/local/kubebuilder/bin')
+	# Now start from article above:
+	s.send('mkdir -p $GOPATH/src/mydomain.com/mygroup && cd $_')
+	s.multisend('kubebuilder init --domain mydomain.com',{'dep ensure':'y'})
+	# Go from here: Write some code / We need to modify the structure of our GenericDaemon to add the necessary fields for our object. Dont’t forget to document the fields, so the doc generator can create a good documentation:
+
+
+
+
+	# Finally, operator SDK
+	# https://itnext.io/building-an-operator-for-kubernetes-with-operator-sdk-40a029ea056
+	s.send('go get github.com/operator-framework/operator-sdk')
+	s.send('cd $GOPATH/src/github.com/operator-framework/operator-sdk')
+	s.send('make dep')
+	s.send('make install')
+	s.send('mkdir -p $GOPATH/src/mydomain.com/mygroup2 && cd $_')
+	s.send('operator-sdk new app-operator --api-version=mygroup2.mydomain.com/v1beta1 --kind=GenericDaemon')
+	# Go from here: Write some code/ We need to modify the structure of our GenericDaemon to add the necessary fields for our object.
