@@ -11,6 +11,8 @@ def do_controller(s):
 	s.send('kubectl apply -f artifacts/examples/example-foo.yaml')
 	s.pause_point('kubectl get pods')
 
+	s.pause_point('next, try: https://itnext.io/building-an-operator-for-kubernetes-with-kubebuilder-17cbd3f07761')
+
 ## Following: https://itnext.io/building-an-operator-for-kubernetes-with-the-sample-controller-b4204be9ad56
 #mkdir -p artifacts/generic-daemon
 #cat >  artifacts/generic-daemon/crd.yaml <<END
