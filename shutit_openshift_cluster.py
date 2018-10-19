@@ -399,16 +399,8 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		# Test cluster
 		cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 
-		# Ad hoc uninstall
-		if shutit.cfg[self.module_id]['do_adhoc_uninstall']:
-			test_uninstall.do_uninstall(shutit, test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
-			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
-
-		# Ad hoc reset
-		if shutit.cfg[self.module_id]['do_adhoc_reset']:
-			test_reset.do_reset(test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
-			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
-
+		###########################
+		# EXTRA SETUPS
 		# Set up golang environment on master1
 		shutit_master1_session.send('wget -qO- https://dl.google.com/go/go1.11.1.linux-amd64.tar.gz | tar -zxvf -')
 		shutit_master1_session.send('mv go /usr/local')
@@ -421,6 +413,28 @@ export GOROOT=/usr/local/go
 export GOPATH=/root/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 END''')
+
+		# Create privileged project to work in (to remove scc limits)
+		shutit_master_1_session.send('oc adm new-project privileged')
+		shutit_master_1_session.send('oadm policy add-scc-to-user anyuid -z privileged')
+		# Alternative method?
+#		shutit_master_1_session.send('''oc patch namespace privileged -p "apiVersion: v1
+#kind: Namespace
+#metadata:
+#  annotations:
+#    openshift.io/sa.scc.uid-range: 0/1"''')
+		###########################
+
+		# Ad hoc uninstall
+		if shutit.cfg[self.module_id]['do_adhoc_uninstall']:
+			test_uninstall.do_uninstall(shutit, test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
+			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
+
+		# Ad hoc reset
+		if shutit.cfg[self.module_id]['do_adhoc_reset']:
+			test_reset.do_reset(test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
+			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
+
 
 		# Istio
 		if shutit.cfg[self.module_id]['do_istio']:
