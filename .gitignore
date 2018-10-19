@@ -2,6 +2,7 @@
 **/*.pyc
 vagrant_run/*
 secret
+dockersecret
 vault
 credscontroller
 package.box

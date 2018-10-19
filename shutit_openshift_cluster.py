@@ -79,6 +79,16 @@ class shutit_openshift_cluster(ShutItModule):
 		if pw == '':
 			shutit.log('''================================================================================\nWARNING! IF THIS DOES NOT WORK YOU MAY NEED TO SET UP A 'secret' FILE IN THIS FOLDER!\n================================================================================''',level=logging.CRITICAL)
 			pw='nopass'
+		docker_uname='imiell'
+		try:
+			docker_pw = open('dockersecret').read().strip()
+		except IOError:
+			docker_pw = ''
+		if docker_pw == '':
+			shutit.log('''================================================================================\nWARNING! IF THIS DOES NOT WORK YOU MAY NEED TO SET UP A 'dockersecret' FILE IN THIS FOLDER!\n================================================================================''',level=logging.CRITICAL)
+			docker_pw='nopass'
+		################################################################################
+
 		################################################################################
 
 		################################################################################
@@ -402,6 +412,8 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		###########################
 		# EXTRA SETUPS
 		# Set up golang environment on master1
+		# Docker login
+		shutit_master1_session.multisend('docker login docker.io',{'Username:':docker_uname,'assword':docker_pw})
 		shutit_master1_session.send('wget -qO- https://dl.google.com/go/go1.11.1.linux-amd64.tar.gz | tar -zxvf -')
 		shutit_master1_session.send('mv go /usr/local')
 		shutit_master1_session.send('mkdir /root/go')
