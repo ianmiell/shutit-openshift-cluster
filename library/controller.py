@@ -189,7 +189,7 @@ END''')
 
 
 	# KUBEBUILDER
-	# Read this: https://itnext.io/building-an-operator-for-kubernetes-with-kubebuilder-17cbd3f07761
+	# Read this: https://itnext.io/building-an-operator-for-kubernetes-with-kubebuilder-17cbd3f07761
 	# From: https://book.kubebuilder.io/quick_start.html
 	s.send('version=1.0.4 # latest stable version')
 	s.send('arch=amd64')
@@ -200,7 +200,7 @@ END''')
 	# Now start from article above:
 	s.send('mkdir -p $GOPATH/src/mydomain.com/mygroup && cd $_')
 	s.multisend('kubebuilder init --domain mydomain.com',{'dep ensure':'y'})
-	# Go from here: Write some code / We need to modify the structure of our GenericDaemon to add the necessary fields for our object. Dont’t forget to document the fields, so the doc generator can create a good documentation:
+	# Go from here: Write some code / We need to modify the structure of our GenericDaemon to add the necessary fields for our object. Don't forget to document the fields, so the doc generator can create a good documentation:
 
 
 
