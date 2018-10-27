@@ -419,8 +419,8 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		##shutit_master1_session.send('rm get_helm.sh')
 		#shutit_master1_session.send('helm init')
 		# Docker login
-		shutit_master1_session.multisend('docker login docker.io',{'Username:':docker_uname,'assword':docker_pw})
-		shutit_master1_session.send('wget -qO- https://dl.google.com/go/go1.11.1.linux-amd64.tar.gz | tar -zxvf -')
+		#shutit_master1_session.multisend('docker login docker.io',{'Username:':docker_uname,'assword':docker_pw})
+		#shutit_master1_session.send('wget -qO- https://dl.google.com/go/go1.11.1.linux-amd64.tar.gz | tar -zxvf -')
 		shutit_master1_session.send('mv go /usr/local')
 		shutit_master1_session.send('mkdir /root/go')
 		shutit_master1_session.send('export GOROOT=/usr/local/go')
