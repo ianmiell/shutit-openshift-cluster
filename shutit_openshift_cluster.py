@@ -434,7 +434,10 @@ END''')
 
 		# Create privileged project to work in (to remove scc limits)
 		shutit_master1_session.send('oc adm new-project privileged')
-		shutit_master1_session.pause_point('correct? oadm policy add-scc-to-user anyuid -z privileged')
+		if shuit.cfg[self.module_id]['ose_major_version'] == '3.9':
+			shutit_master1_session.send('oc adm policy add-scc-to-user anyuid -z privileged')
+		else:
+			shutit_master1_session.send('oadm policy add-scc-to-user anyuid -z privileged')
 		# Alternative method?
 #		shutit_master1_session.send('''oc patch namespace privileged -p "apiVersion: v1
 #kind: Namespace
@@ -505,9 +508,9 @@ END''')
 		shutit.get_config(self.module_id,'chef_selinux_policy_cookbook_version',default='latest')
 		shutit.get_config(self.module_id,'chef_compat_resource_cookbook_version',default='latest')
 		shutit.get_config(self.module_id,'pw',default='')
-		shutit.get_config(self.module_id,'ose_major_version',default='3.7')
+		shutit.get_config(self.module_id,'ose_major_version',default='3.9')
 		shutit.get_config(self.module_id,'cookbook_branch',default='master')
-		shutit.get_config(self.module_id,'ose_version',default='3.7')
+		shutit.get_config(self.module_id,'ose_version',default='3.9')
 		shutit.get_config(self.module_id,'inject_compat_resource',default=False,boolean=True)
 		shutit.get_config(self.module_id,'cluster_vm_names',default='shutit_openshift_cluster')
 		# Check all is OK/Sane
