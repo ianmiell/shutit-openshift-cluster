@@ -434,7 +434,7 @@ END''')
 
 		# Create privileged project to work in (to remove scc limits)
 		shutit_master1_session.send('oc adm new-project privileged')
-		shutit_master1_session.send('oadm policy add-scc-to-user anyuid -z privileged')
+		shutit_master1_session.pause_point('correct? oadm policy add-scc-to-user anyuid -z privileged')
 		# Alternative method?
 #		shutit_master1_session.send('''oc patch namespace privileged -p "apiVersion: v1
 #kind: Namespace
