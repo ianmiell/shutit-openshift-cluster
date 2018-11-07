@@ -434,7 +434,7 @@ END''')
 
 		# Create privileged project to work in (to remove scc limits)
 		shutit_master1_session.send('oc adm new-project privileged')
-		if shuit.cfg[self.module_id]['ose_major_version'] == '3.9':
+		if shutit.cfg[self.module_id]['ose_major_version'] == '3.9':
 			shutit_master1_session.send('oc adm policy add-scc-to-user anyuid -z privileged')
 		else:
 			shutit_master1_session.send('oadm policy add-scc-to-user anyuid -z privileged')
