@@ -23,6 +23,7 @@ def do_run_apps(test_config_module, shutit_master1_session, shutit, shutit_sessi
 			else:
 				shutit_master1_session.send('sleep 15')
 				shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig describe pods || true')
+				shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig get all || true')
 		shutit.log('router while loop done.')
 		if ok:
 			shutit.log('Broken out of outer loop, router should now be OK.')

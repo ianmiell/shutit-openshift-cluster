@@ -404,6 +404,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 		shutit_master1_session.send('systemctl stop crond')
 		check_nodes.label_nodes(shutit_master1_session, test_config_module)
 
+		shutit_master1_session.send('sleep 600')
 		run_apps.do_run_apps(test_config_module, shutit_master1_session, shutit, shutit_session)
 
 		# Test cluster
