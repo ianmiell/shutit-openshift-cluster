@@ -14,6 +14,7 @@ export DO_ADHOC_RESET=
 export DO_VAULT=
 export DO_ISTIO=true
 export DO_CRD=
+export DO_TAINTS_AND_TOLERATIONS=
 export UPGRADE_13_14=
 export UPGRADE_14_15=
 export UPGRADE_15_36=

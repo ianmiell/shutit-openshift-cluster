@@ -16,6 +16,7 @@ export DO_VAULT=
 export DO_ISTIO=
 export DO_CRD=
 export DO_CONTROLLER=true
+export DO_TAINTS_AND_TOLERATIONS=
 export UPGRADE_13_14=
 export UPGRADE_14_15=
 export UPGRADE_15_36=

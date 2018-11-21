@@ -554,6 +554,8 @@ END''')
 		shutit.get_config(self.module_id,'do_crd',default=False,boolean=True)
 		# Controller
 		shutit.get_config(self.module_id,'do_controller',default=False,boolean=True)
+		# Taints and tolerations
+		shutit.get_config(self.module_id,'do_taints_and_tolerations_example',default=False,boolean=True)
 		return True
 
 
