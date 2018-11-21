@@ -18,6 +18,7 @@ from library import test_uninstall
 from library import upgrades
 from library import vault
 from library import run_apps
+from library import taints_and_tolerations
 
 from shutit_module import ShutItModule
 
@@ -473,6 +474,10 @@ END''')
 		# Controller
 		if shutit.cfg[self.module_id]['do_controller']:
 			controller.do_controller(shutit_master1_session)
+
+		# do_taints_and_tolerations_example
+		if shutit.cfg[self.module_id]['do_taints_and_tolerations_example']:
+			controller.do_taints_and_tolerations_example(shutit_master1_session)
 
 		# Upgrades
 		upgrades.do_upgrades(shutit,
