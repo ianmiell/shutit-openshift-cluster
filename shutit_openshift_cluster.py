@@ -148,7 +148,7 @@ class shutit_openshift_cluster(ShutItModule):
 			# Remove any existing landrush entry.
 			shutit_session.send(vagrantcommand + ' landrush rm ' + test_config_module.machines[machine]['fqdn'])
 			# vagrant up - Needs to be done serially for stability reasons.
-			shutit_session.multisend(vagrantcommand + ' up --provider ' + vagrant_provider + ' ' + machine,{'assword for':pw})
+			shutit_session.multisend(vagrantcommand + ' up --provider ' + vagrant_provider + ' ' + machine,{'assword:':pw},{'assword for':pw})
 			# Check that the landrush entry is there.
 			shutit_session.send(vagrantcommand + ' landrush ls | grep -w ' + test_config_module.machines[machine]['fqdn'])
 			shutit_session.login(command=vagrantcommand + ' ssh ' + machine)
