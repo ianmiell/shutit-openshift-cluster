@@ -39,6 +39,7 @@ SHUTIT_MODULE_NAME='tk.shutit.shutit_openshift_cluster.shutit_openshift_cluster'
 # DO_ISTIO      - istio
 # DO_VAULT      - vault
 # DO_CRD        - crd
+# DO_TAINTS_AND_TOLERATIONS - taints_and_tolerations
 # DO_CONTROLLER - controller
 
 if [[ $BRANCH_NAME = '' ]]
@@ -91,6 +92,13 @@ else
 	DO_CRD='true'
 fi
 
+if [[ $DO_TAINTS_AND_TOLERATIONS = '' ]] || [[ $DO_TAINTS_AND_TOLERATIONS = 'false' ]]
+then
+	DO_TAINTS_AND_TOLERATIONS='false'
+else
+	DO_TAINTS_AND_TOLERATIONS='true'
+fi
+
 if [[ $DO_CONTROLLER = '' ]] || [[ $DO_CONTROLLER = 'false' ]]
 then
 	DO_CONTROLLER='false'
@@ -107,7 +115,7 @@ fi
 
 if [[ $CHEF_SELINUX_COOKBOOK_VERSION = '' ]]
 then
-	CHEF_SELINUX_COOKBOOK_VERSION='latest'
+	CHEF_SELINUX_COOKBOOK_VERSION='2.1.0'
 fi
 if [[ $CHEF_COMPAT_RESOURCE_COOKBOOK_VERSION = '' ]]
 then
@@ -251,6 +259,7 @@ do
 					-s ${SHUTIT_MODULE_NAME} do_vault                              ${DO_VAULT} \
 					-s ${SHUTIT_MODULE_NAME} do_crd                                ${DO_CRD} \
 					-s ${SHUTIT_MODULE_NAME} do_controller                         ${DO_CONTROLLER} \
+					-s ${SHUTIT_MODULE_NAME} do_taints_and_tolerations             ${DO_TAINTS_AND_TOLERATIONS} \
 					-s ${SHUTIT_MODULE_NAME} openshift_docker_image_version        ${ose_docker_image_version} \
 					-s ${SHUTIT_MODULE_NAME} adhoc_uninstall                       ${DO_ADHOC_UNINSTALL} \
 					-s ${SHUTIT_MODULE_NAME} adhoc_reset                           ${DO_ADHOC_RESET} \

@@ -18,6 +18,7 @@ from library import test_uninstall
 from library import upgrades
 from library import vault
 from library import run_apps
+from library import taints_and_tolerations
 
 from shutit_module import ShutItModule
 
@@ -147,7 +148,7 @@ class shutit_openshift_cluster(ShutItModule):
 			# Remove any existing landrush entry.
 			shutit_session.send(vagrantcommand + ' landrush rm ' + test_config_module.machines[machine]['fqdn'])
 			# vagrant up - Needs to be done serially for stability reasons.
-			shutit_session.multisend(vagrantcommand + ' up --provider ' + vagrant_provider + ' ' + machine,{'assword for':pw})
+			shutit_session.multisend(vagrantcommand + ' up --provider ' + vagrant_provider + ' ' + machine,{'assword:':pw,'assword for':pw})
 			# Check that the landrush entry is there.
 			shutit_session.send(vagrantcommand + ' landrush ls | grep -w ' + test_config_module.machines[machine]['fqdn'])
 			shutit_session.login(command=vagrantcommand + ' ssh ' + machine)
@@ -474,6 +475,10 @@ END''')
 		if shutit.cfg[self.module_id]['do_controller']:
 			controller.do_controller(shutit_master1_session)
 
+		# do_taints_and_tolerations_example
+		if shutit.cfg[self.module_id]['do_taints_and_tolerations_example']:
+			controller.do_taints_and_tolerations_example(shutit_master1_session)
+
 		# Upgrades
 		upgrades.do_upgrades(shutit,
 		                     test_config_module,
@@ -554,6 +559,8 @@ END''')
 		shutit.get_config(self.module_id,'do_crd',default=False,boolean=True)
 		# Controller
 		shutit.get_config(self.module_id,'do_controller',default=False,boolean=True)
+		# Taints and tolerations
+		shutit.get_config(self.module_id,'do_taints_and_tolerations_example',default=False,boolean=True)
 		return True
 
 

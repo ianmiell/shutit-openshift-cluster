@@ -71,6 +71,8 @@ echo 'DO_CRD (blank for default (false))'
 read DO_CRD
 echo 'DO_CONTROLLER (blank for default (false))'
 read DO_CONTROLLER
+echo 'DO_TAINTS_AND_TOLERATIONS (blank for default (false))'
+read DO_TAINTS_AND_TOLERATIONS
 
 
 cat last_args_interactive >> last_args_interactive.old
@@ -93,6 +95,7 @@ echo export DO_ADHOC_RESET=${DO_ADHOC_RESET}
 echo export DO_VAULT=${DO_VAULT}
 echo export DO_ISTIO=${DO_ISTIO}
 echo export DO_CRD=${DO_CRD}
+echo export DO_TAINTS_AND_TOLERATIONS=${DO_TAINTS_AND_TOLERATIONS}
 echo export DO_CONTROLLER=${DO_CONTROLLER}
 echo export UPGRADE_13_14=${UPGRADE_13_14}
 echo export UPGRADE_14_15=${UPGRADE_14_15}
