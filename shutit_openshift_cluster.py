@@ -19,6 +19,7 @@ from library import upgrades
 from library import vault
 from library import run_apps
 from library import taints_and_tolerations
+from library import helm
 
 from shutit_module import ShutItModule
 
@@ -458,6 +459,9 @@ END''')
 			test_reset.do_reset(test_config_module, shutit_sessions, shutit.cfg[self.module_id]['chef_deploy_method'])
 			cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 
+		# Helm
+		if shutit.cfg[self.module_id]['do_helm']:
+			helm.do_helm(shutit_master1_session)
 
 		# Istio
 		if shutit.cfg[self.module_id]['do_istio']:
@@ -561,6 +565,8 @@ END''')
 		shutit.get_config(self.module_id,'do_controller',default=False,boolean=True)
 		# Taints and tolerations
 		shutit.get_config(self.module_id,'do_taints_and_tolerations_example',default=False,boolean=True)
+		# Helm
+		shutit.get_config(self.module_id,'do_helm',default=False,boolean=True)
 		return True
 
 

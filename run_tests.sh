@@ -112,6 +112,12 @@ then
 else
 	DO_ADHOC_RESET='true'
 fi
+if [[ $DO_HELM = '' ]] || [[ $DO_HELM = 'false' ]]
+then
+	DO_HELM='false'
+else
+	DO_HELM='true'
+fi
 
 if [[ $CHEF_SELINUX_COOKBOOK_VERSION = '' ]]
 then
@@ -260,6 +266,7 @@ do
 					-s ${SHUTIT_MODULE_NAME} do_crd                                ${DO_CRD} \
 					-s ${SHUTIT_MODULE_NAME} do_controller                         ${DO_CONTROLLER} \
 					-s ${SHUTIT_MODULE_NAME} do_taints_and_tolerations             ${DO_TAINTS_AND_TOLERATIONS} \
+					-s ${SHUTIT_MODULE_NAME} do_helm                               ${DO_HELM} \
 					-s ${SHUTIT_MODULE_NAME} openshift_docker_image_version        ${ose_docker_image_version} \
 					-s ${SHUTIT_MODULE_NAME} adhoc_uninstall                       ${DO_ADHOC_UNINSTALL} \
 					-s ${SHUTIT_MODULE_NAME} adhoc_reset                           ${DO_ADHOC_RESET} \
