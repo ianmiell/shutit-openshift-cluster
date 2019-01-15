@@ -34,7 +34,7 @@ def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_mo
 				break
 			count -= 1
 			# Sometimes terminating containers don't go away quickly.
-			status = shutit_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods -n mysql | grep ^mysql- | grep -v deploy | awk '{print $3}' | grep -v Terminating""")
+			status = shutit_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods -n mysql | grep ^mysql- | grep -v deploy | awk '{print $3}' | grep -v Terminating | head -1""")
 			if status == 'Running':
 				ok = True
 				break
@@ -45,7 +45,7 @@ def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_mo
 				shutit_session.send('sleep 15')
 				shutit_session.send('oc --config=/etc/origin/master/admin.kubeconfig deploy mysql --retry -n mysql || oc --config=/etc/origin/master/admin.kubeconfig deploy mysql --latest -n mysql || oc --config=/etc/origin/master/admin.kubeconfig rollout retry dc/mysql -n mysql || oc --config=/etc/origin/master/admin.kubeconfig rollout latest dc/mysql -n mysql')
 			# Check on deployment
-			deploy_status = shutit_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods -n mysql | grep ^mysql- | grep -w deploy | awk '{print $3}' | grep -v Terminating""")
+			deploy_status = shutit_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods -n mysql | grep ^mysql- | grep -w deploy | awk '{print $3}' | grep -v Terminating | head -1""")
 			# If deploy has errored...
 			if deploy_status == 'Error':
 				# Try and rollout latest, ensure it's been cancelled and roll out again.
