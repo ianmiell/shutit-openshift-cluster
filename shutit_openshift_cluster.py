@@ -402,7 +402,7 @@ cookbook_path            ["#{current_dir}/../cookbooks"]'''
 					shutit_session.send(r'''echo '*/5 * * * * PATH=${PATH}:/usr/sbin chef-client --run-lock-timeout 0 > /tmp/chef.log.`date "+\%s"` 2>&1' | crontab''',note='set up crontab on ' + machine)
 		###############################################################################
 
-		check_nodes.check_nodes(shutit_master1_session, test_config_module, vagrantcommand, vagrant_provider, pw)
+		check_nodes.check_nodes(shutit_sessions, test_config_module, vagrantcommand, vagrant_provider, pw)
 		shutit_master1_session.send('systemctl stop crond')
 		check_nodes.label_nodes(shutit_master1_session, test_config_module)
 
