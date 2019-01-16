@@ -7,13 +7,13 @@ def do_run_apps(test_config_module, shutit_master1_session, shutit, shutit_sessi
 		count = 20
 		shutit.log('Iterations left: ' + str(count),level=logging.INFO)
 		while True:
-			status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^router- | grep -v deploy | awk '{print $3}' | grep -v Terminating""")
+			status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^router- | grep -v deploy | awk '{print $3}' | grep -v Terminating | head -1""")
 			if count == 0:
 				break
 			count -= 1
 			if status == 'Running':
 				shutit_master1_session.send('#' + status)
-				status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^router- | grep -v deploy | awk '{print $3}' | grep -v Terminating""")
+				status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^router- | grep -v deploy | awk '{print $3}' | grep -v Terminating | head -1""")
 				ok = True
 				break
 			elif status in ('Error','ImagePullBackOff'):
@@ -37,9 +37,9 @@ def do_run_apps(test_config_module, shutit_master1_session, shutit, shutit_sessi
 		shutit.log('Iterations left: ' + str(count),level=logging.INFO)
 		while True:
 			# Either registry or docker-registry (more recently?)
-			status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^registry- | grep -v deploy | awk '{print $3}' | grep -v Terminating""")
+			status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^registry- | grep -v deploy | awk '{print $3}' | grep -v Terminating | head -1""")
 			if status == '':
-				status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^docker-registry- | grep -v deploy | awk '{print $3}' | grep -v Terminating""")
+				status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^docker-registry- | grep -v deploy | awk '{print $3}' | grep -v Terminating | head -1""")
 			if count == 0:
 				break
 			count -= 1
@@ -52,7 +52,7 @@ def do_run_apps(test_config_module, shutit_master1_session, shutit, shutit_sessi
 				shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig deploy docker-registry --retry || oc --config=/etc/origin/master/admin.kubeconfig deploy docker-registry --latest || oc --config=/etc/origin/master/admin.kubeconfig rollout retry dc/docker-registry || oc --config=/etc/origin/master/admin.kubeconfig rollout latest dc/docker-registry')
 			else:
 				shutit_master1_session.send('sleep 14')
-				deploy_status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^registry- | grep -w deploy | awk '{print $3}' | grep -v Terminating""")
+				deploy_status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^registry- | grep -w deploy | awk '{print $3}' | grep -v Terminating | head -1""")
 				if deploy_status == 'Error':
 					shutit_session.send('oc rollout latest dc/docker-registry')
 			shutit.log('registry while loop done.')
