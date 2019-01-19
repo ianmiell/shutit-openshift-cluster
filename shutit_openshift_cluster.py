@@ -20,6 +20,7 @@ from library import vault
 from library import run_apps
 from library import taints_and_tolerations
 from library import helm
+from library import flux
 
 from shutit_module import ShutItModule
 
@@ -462,6 +463,8 @@ END''')
 		# Helm
 		if shutit.cfg[self.module_id]['do_helm']:
 			helm.do_helm(shutit_master1_session)
+		if shutit.cfg[self.module_id]['do_flux']:
+			flux.do_flux(shutit_master1_session)
 
 		# Istio
 		if shutit.cfg[self.module_id]['do_istio']:
@@ -555,18 +558,8 @@ END''')
 			shutit.cfg[self.module_id]['do_adhoc_reset'] = True
 		else:
 			shutit.cfg[self.module_id]['do_adhoc_reset'] = False
-		# Istio
-		shutit.get_config(self.module_id,'do_istio',default=False,boolean=True)
-		# Vault
-		shutit.get_config(self.module_id,'do_vault',default=False,boolean=True)
-		# Cluster CRD
-		shutit.get_config(self.module_id,'do_crd',default=False,boolean=True)
-		# Controller
-		shutit.get_config(self.module_id,'do_controller',default=False,boolean=True)
-		# Taints and tolerations
-		shutit.get_config(self.module_id,'do_taints_and_tolerations_example',default=False,boolean=True)
-		# Helm
-		shutit.get_config(self.module_id,'do_helm',default=False,boolean=True)
+		for feature in ('istio','vault','crd','controller','taints_and_tolerations_example','helm','flux'):
+			shutit.get_config(self.module_id,'do_' + feature,default=False,boolean=True)
 		return True
 
 

@@ -74,7 +74,7 @@ read DO_CONTROLLER
 echo 'DO_TAINTS_AND_TOLERATIONS (blank for default (false))'
 read DO_TAINTS_AND_TOLERATIONS
 
-
+touch last_args_interactive
 cat last_args_interactive >> last_args_interactive.old
 (
 echo -n '#'
