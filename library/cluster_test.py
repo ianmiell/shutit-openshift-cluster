@@ -20,7 +20,6 @@ def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_mo
 		shutit_session.send('oc adm new-project mysql')
 	ok = False
 	while not ok:
-		count = 80
 		shutit.log('Iterations left: ' + str(count),level=logging.INFO)
 		# Destroy all...
 		shutit_session.send('oc --config=/etc/origin/master/admin.kubeconfig delete svc mysql -n mysql', check_exit=False)
@@ -29,6 +28,8 @@ def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_mo
 		shutit_session.send('''oc --config=/etc/origin/master/admin.kubeconfig get pods -n mysql | grep mysql | awk '{print $1}' | xargs -n1 oc --config=/etc/origin/master/admin.kubeconfig delete pod -n mysql || true''')
 		# --allow-missing-images has been seen to be needed very occasionally.
 		shutit_session.send('oc --config=/etc/origin/master/admin.kubeconfig new-app -e=MYSQL_ROOT_PASSWORD=root mysql --allow-missing-images -n mysql')
+		#if not check_app('mysql','mysql', '80', '15'):
+		#	shutit_session.pause_point('mysql app did not start correctly')
 		while True:
 			if count == 0:
 				break
@@ -124,7 +125,8 @@ def diagnostic_tests(shutit_session):
 
 
 
-def check_app(namespace, appname):
+def check_app(namespace, appname, iters, sleep):
+	count = iters
 	while True:
 		if count == 0:
 			break
@@ -133,7 +135,7 @@ def check_app(namespace, appname):
 		status = shutit_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods -n """ + namespace + """ | grep ^""" + appname + """- | grep -v deploy | awk '{print $3}' | grep -v Terminating | head -1""")
 		if status == 'Running':
 			ok = True
-			break
+			return True
 		elif status == 'Error':
 			break
 		elif status == 'ImagePullBackOff':
@@ -149,5 +151,5 @@ def check_app(namespace, appname):
 			shutit_session.send('oc rollout latest dc/' + appname + ' -n ' + namespace)
 		# For debug/info purposes.
 		shutit_session.send('oc --config=/etc/origin/master/admin.kubeconfig get pods -n ' + namespace + ' | grep ^' + appname + '-',check_exit=False)
-		shutit_session.send('sleep 15')
-
+		shutit_session.send('sleep ' + sleep)
+	return False

@@ -219,6 +219,16 @@ class shutit_openshift_cluster(ShutItModule):
 			shutit_chefserver_session = None
 			shutit_chefwkstn_session = None
 		shutit_master1_session = shutit_sessions['master1']
+		# Added to determine iptables status
+		shutit_master1_session.send_file('/tmp/iptabcapture.sh','''#!/bin/bash
+while true; do
+date >> /tmp/iptab.log
+iptables-save -t filter >> /tmp/iptab.log
+sleep 5
+done''')
+		shutit_master1_session.send('chmod +x /tmp/iptabcapture.sh')
+		shutit_master1_session.send('nohup /tmp/iptabcapture.sh &')
+
 		###############################################################################
 
 
