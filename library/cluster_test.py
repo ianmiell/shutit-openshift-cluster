@@ -29,6 +29,7 @@ def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_mo
 		shutit_session.send('''oc --config=/etc/origin/master/admin.kubeconfig get pods -n mysql | grep mysql | awk '{print $1}' | xargs -n1 oc --config=/etc/origin/master/admin.kubeconfig delete pod -n mysql || true''')
 		# --allow-missing-images has been seen to be needed very occasionally.
 		shutit_session.send('oc --config=/etc/origin/master/admin.kubeconfig new-app -e=MYSQL_ROOT_PASSWORD=root mysql --allow-missing-images -n mysql')
+		# TODO: call check_app
 		while True:
 			if count == 0:
 				break
@@ -83,3 +84,33 @@ def diagnostic_tests(shutit_session):
 	             'UnitStatus')
 	for test in test_list:
 		shutit_session.send('oc adm diagnostics ' + test)
+
+
+
+def check_app(namespace, appname):
+	while True:
+		if count == 0:
+			break
+		count -= 1
+		# Sometimes terminating containers don't go away quickly.
+		status = shutit_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods -n """ + namespace + """ | grep ^""" + appname + """- | grep -v deploy | awk '{print $3}' | grep -v Terminating | head -1""")
+		if status == 'Running':
+			ok = True
+			break
+		elif status == 'Error':
+			break
+		elif status == 'ImagePullBackOff':
+			shutit_session.send('oc --config=/etc/origin/master/admin.kubeconfig deploy ' + appname + ' --cancel -n ' + namespace + ' || oc --config=/etc/origin/master/admin.kubeconfig  rollout cancel dc/' + appname + ' -n ' + namespace)
+			shutit_session.send('sleep 15')
+			shutit_session.send('oc --config=/etc/origin/master/admin.kubeconfig deploy ' + appname + ' --retry -n ' + namespace + ' || oc --config=/etc/origin/master/admin.kubeconfig deploy ' + appname + ' --latest -n ' + namespace + ' || oc --config=/etc/origin/master/admin.kubeconfig rollout retry dc/' + appname + ' -n ' + namespace + ' || oc --config=/etc/origin/master/admin.kubeconfig rollout latest dc/' + appname + ' -n ' + namespace)
+		# Check on deployment
+		deploy_status = shutit_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods -n """ + namespace + """ | grep ^""" + appname + """- | grep -w deploy | awk '{print $3}' | grep -v Terminating | head -1""")
+		# If deploy has errored...
+		if deploy_status == 'Error':
+			# Try and rollout latest, ensure it's been cancelled and roll out again.
+			shutit_session.send('oc rollout cancel dc/' + appname + ' -n ' + namespace, check_exit=False)
+			shutit_session.send('oc rollout latest dc/' + appname + ' -n ' + namespace)
+		# For debug/info purposes.
+		shutit_session.send('oc --config=/etc/origin/master/admin.kubeconfig get pods -n ' + namespace + ' | grep ^' + appname + '-',check_exit=False)
+		shutit_session.send('sleep 15')
+
