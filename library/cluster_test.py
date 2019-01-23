@@ -96,9 +96,9 @@ def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_mo
 			shutit_session.send('sleep 15')
 	time.sleep(30) # pause to allow resolve to work ok
 	podname = shutit_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods -n net | grep net-tools | grep -v deploy | awk '{print $1}' | tail -1""")
-	shutit_session.send("""oc --config=/etc/origin/master/admin.kubeconfig -n net exec -ti """ + podname + """ -- /bin/sh -c 'resolveip google.com'""")
+	shutit_session.send("""oc --config=/etc/origin/master/admin.kubeconfig -n net exec -ti """ + podname + """ -- /bin/sh -c 'host google.com'""")
 	for addr in ('kubernetes.default.svc','kubernetes.default.svc.cluster.local'):
-		if shutit_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig -n net-tools exec -ti """ + podname + """ -- /bin/sh -c 'resolveip """ + addr + """ -s'""") != '172.30.0.1':
+		if shutit_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig -n net-tools exec -ti """ + podname + """ -- /bin/sh -c 'host """ + addr + """ -s'""") != '172.30.0.1':
 			shutit_session.pause_point('kubernetes.default.svc.cluster.local did not resolve correctly')
 
 
