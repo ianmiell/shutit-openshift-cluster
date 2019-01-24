@@ -20,6 +20,7 @@ def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_mo
 		shutit_session.send('oc adm new-project mysql')
 	ok = False
 	while not ok:
+		count = 80
 		shutit.log('Iterations left: ' + str(count),level=logging.INFO)
 		# Destroy all...
 		shutit_session.send('oc --config=/etc/origin/master/admin.kubeconfig delete svc mysql -n mysql', check_exit=False)
@@ -30,7 +31,6 @@ def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_mo
 		shutit_session.send('oc --config=/etc/origin/master/admin.kubeconfig new-app -e=MYSQL_ROOT_PASSWORD=root mysql --allow-missing-images -n mysql')
 		#if not check_app('mysql','mysql', '80', '15'):
 		#	shutit_session.pause_point('mysql app did not start correctly')
-		count = 80
 		while True:
 			if count == 0:
 				break
