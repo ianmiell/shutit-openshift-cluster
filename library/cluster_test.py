@@ -61,6 +61,7 @@ def test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_mo
 	# ping has been removed!
 	if shutit_session.send_and_get_output('oc get projects | grep net | wc -l') == '0':
 		shutit_session.send('oc adm new-project net')
+	ok = False
 	while not ok:
 		count = 80
 		shutit.log('Iterations left: ' + str(count),level=logging.INFO)
