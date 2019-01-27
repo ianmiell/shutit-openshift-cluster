@@ -28,6 +28,8 @@ def label_nodes(shutit_master1_session, test_config_module):
 	for machine in test_config_module.machines.keys():
 		if test_config_module.machines[machine]['is_node'] and test_config_module.machines[machine]['region'] not in ('NA',''):
 			shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig label node ' + test_config_module.machines[machine]['fqdn'] + ' region=' + test_config_module.machines[machine]['region'] + ' --overwrite')
+		if test_config_module.machines[machine]['is_master'] and test_config_module.machines[machine]['region'] not in ('NA',''):
+			shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig label node ' + test_config_module.machines[machine]['fqdn'] + ' region=' + test_config_module.machines[machine]['region'] + ' --overwrite')
 
 
 # SET UP CORE APPS
