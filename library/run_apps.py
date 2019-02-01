@@ -4,7 +4,7 @@ from library import check_nodes
 def do_run_apps(test_config_module, shutit_master1_session, shutit, shutit_session):
 	while True:
 		ok = False
-		count = 20
+		count = 60
 		shutit.log('Iterations left: ' + str(count),level=logging.INFO)
 		while True:
 			status = shutit_master1_session.send_and_get_output("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep ^router- | grep -v deploy | awk '{print $3}' | grep -v Terminating | head -1""")
@@ -31,6 +31,7 @@ def do_run_apps(test_config_module, shutit_master1_session, shutit, shutit_sessi
 		shutit_master1_session.send("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep -w ^router | awk '{print $1}' | xargs oc --config=/etc/origin/master/admin.kubeconfig delete pod || true""")
 		shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig deploy router --retry || oc --config=/etc/origin/master/admin.kubeconfig deploy router --latest || oc --config=/etc/origin/master/admin.kubeconfig rollout retry dc/router || oc --config=/etc/origin/master/admin.kubeconfig rollout latest dc/router')
 		check_nodes.schedule_nodes(test_config_module, shutit_master1_session)
+		shared.redeploy_components(shutit_master1_session,'router')
 	while True:
 		ok = False
 		count = 20
@@ -64,3 +65,4 @@ def do_run_apps(test_config_module, shutit_master1_session, shutit, shutit_sessi
 			shutit_master1_session.send("""oc --config=/etc/origin/master/admin.kubeconfig get pods | grep -w registry | awk '{print $1}' | xargs oc --config=/etc/origin/master/admin.kubeconfig delete pod || true""")
 			shutit_master1_session.send('oc --config=/etc/origin/master/admin.kubeconfig deploy docker-registry --retry || oc --config=/etc/origin/master/admin.kubeconfig deploy docker-registry --latest || oc --config=/etc/origin/master/admin.kubeconfig rollout retry dc/docker-registry || oc --config=/etc/origin/master/admin.kubeconfig rollout latest dc/docker-registry')
 			check_nodes.schedule_nodes(test_config_module, shutit_master1_session)
+			shared.redeploy_components(shutit_master1_session,'registry')

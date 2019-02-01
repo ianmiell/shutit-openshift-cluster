@@ -1,5 +1,6 @@
 import time
 from library import cluster_test
+from library import shared
 
 def do_upgrades(shutit, test_config_module, shutit_sessions, check_version, shutit_chefwkstn_session, shutit_master1_session, module_id):
 
@@ -8,11 +9,6 @@ def do_upgrades(shutit, test_config_module, shutit_sessions, check_version, shut
 
 	def crontab_on(shutit_session):
 		shutit_session.send('systemctl start crond')
-
-	# For 3.7 upgrade, docker upgrade requires a redeploy to ensure all is ok
-	def redeploy_components(shutit_session):
-		shutit_session.send('oc rollout latest docker-registry')
-		shutit_session.send('oc rollout latest router')
 
 	# 1.4 => 1.5
 	if shutit.cfg[module_id]['do_upgrade_14_15']:
@@ -354,7 +350,7 @@ def do_upgrades(shutit, test_config_module, shutit_sessions, check_version, shut
 			if test_config_module.machines[machine]['is_node']:
 				shutit_session.send('systemctl restart origin-node',check_exit=False)
 			crontab_on(shutit_session)
-		redeploy_components(shutit_master1_session)
+		shared.redeploy_components(shutit_master1_session)
 		time.sleep(2*60)
 		cluster_test.test_cluster(shutit, shutit_sessions, shutit_master1_session, test_config_module)
 

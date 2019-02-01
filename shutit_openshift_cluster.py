@@ -62,13 +62,6 @@ class shutit_openshift_cluster(ShutItModule):
 			for machine in sorted(test_config_module.machines.keys()):
 				shutit_session = shutit_sessions[machine]
 				shutit_session.wait()
-
-		# For 3.7 upgrade, docker upgrade requires a redeploy to ensure all is ok
-		def redeploy_components(shutit_session):
-			shutit_session.send('oc rollout latest docker-registry')
-			shutit_session.send('oc rollout latest router')
-			# Dumbly wait a minute
-			shutit_session.send('sleep 60')
 		################################################################################
 
 
